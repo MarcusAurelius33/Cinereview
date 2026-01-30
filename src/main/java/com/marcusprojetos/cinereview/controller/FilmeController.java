@@ -1,10 +1,12 @@
 package com.marcusprojetos.cinereview.controller;
 
+import com.marcusprojetos.cinereview.controller.dto.ErroResposta;
 import com.marcusprojetos.cinereview.controller.dto.FilmeDTO;
 import com.marcusprojetos.cinereview.entities.Filme;
+import com.marcusprojetos.cinereview.exceptions.RegistroDuplicadoException;
 import com.marcusprojetos.cinereview.service.FilmeService;
-import jakarta.servlet.Servlet;
-import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -16,28 +18,30 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("filmes")
 public class FilmeController {
 
     private final FilmeService service;
 
-    public FilmeController(FilmeService service){
-        this.service = service;
-    }
-
     @PostMapping
-    public ResponseEntity<Void> salvarFilme(@RequestBody FilmeDTO filme){
-        Filme filmeEntidade = filme.mapearParaFilme();
-        service.salvar(filmeEntidade);
+    public ResponseEntity<Object> salvarFilme(@RequestBody @Valid FilmeDTO filme) {
+        try {
+            Filme filmeEntidade = filme.mapearParaFilme();
+            service.salvar(filmeEntidade);
 
-        URI location = ServletUriComponentsBuilder.
-                fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(filmeEntidade.getId())
-                .toUri();
+            URI location = ServletUriComponentsBuilder.
+                    fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(filmeEntidade.getId())
+                    .toUri();
 
-        System.out.println(filmeEntidade.getId());
-        return ResponseEntity.created(location).build();
+            System.out.println(filmeEntidade.getId());
+            return ResponseEntity.created(location).build();
+        }catch (RegistroDuplicadoException e){
+            var erroDTO = ErroResposta.conflito(e.getMessage());
+            return ResponseEntity.status(erroDTO.status()).body(erroDTO);
+        }
     }
 
     @GetMapping("{id}")
@@ -70,7 +74,7 @@ public class FilmeController {
         public ResponseEntity<List<FilmeDTO>> pesquisar(
                 @RequestParam(value = "titulo", required = false) String titulo,
                 @RequestParam(value = "nota", required = false) Double nota){
-        List<Filme> resultado = service.pesquisa(titulo, nota);
+        List<Filme> resultado = service.pesquisaByExample(titulo, nota);
         List<FilmeDTO> lista =  resultado.stream().map(filme -> new FilmeDTO(filme.getId(),
                 filme.getTitulo(),
                 filme.getSinopse(),
@@ -80,21 +84,26 @@ public class FilmeController {
         }
 
         @PutMapping("{id}")
-        public ResponseEntity<Void> atualizar(@PathVariable("id") String id, @RequestBody FilmeDTO dto){
-            var idFilme = UUID.fromString(id);
-            Optional<Filme> filmeOptional = service.obterPorId(idFilme);
+        public ResponseEntity<Object> atualizar(@PathVariable("id") String id, @RequestBody FilmeDTO dto){
+            try {
+                var idFilme = UUID.fromString(id);
+                Optional<Filme> filmeOptional = service.obterPorId(idFilme);
 
-            if(filmeOptional.isEmpty()){
-                return ResponseEntity.notFound().build();
+                if (filmeOptional.isEmpty()) {
+                    return ResponseEntity.notFound().build();
+                }
+                var filme = filmeOptional.get();
+                filme.setTitulo(dto.titulo());
+                filme.setSinopse(dto.sinopse());
+                filme.setGeneroFilme(dto.generoFilme());
+                filme.setNota(dto.nota());
+
+                service.atualizar(filme);
+
+                return ResponseEntity.noContent().build();
+            } catch(RegistroDuplicadoException e){
+                var erroDTO = ErroResposta.conflito(e.getMessage());
+                return ResponseEntity.status(erroDTO.status()).body(erroDTO);
             }
-            var filme = filmeOptional.get();
-            filme.setTitulo(dto.titulo());
-            filme.setSinopse(dto.sinopse());
-            filme.setGeneroFilme(dto.genero());
-            filme.setNota(dto.nota());
-
-            service.atualizar(filme);
-
-            return ResponseEntity.noContent().build();
         }
     }
