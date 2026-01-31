@@ -1,6 +1,7 @@
 package com.marcusprojetos.cinereview.controller.mappers;
 
 import ch.qos.logback.core.model.ComponentModel;
+import com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisaReviewDTO;
 import com.marcusprojetos.cinereview.controller.dto.ReviewDTO;
 import com.marcusprojetos.cinereview.entities.Review;
 import com.marcusprojetos.cinereview.repository.FilmeRepository;
@@ -8,7 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = FilmeMapper.class)
 public abstract class ReviewMapper {
 
     @Autowired
@@ -16,4 +17,6 @@ public abstract class ReviewMapper {
 
     @Mapping(target = "filme", expression = "java( filmeRepository.findById(dto.id_filme()).orElse(null) )")
     public abstract Review toEntity(ReviewDTO dto);
+
+    public abstract ResultadoPesquisaReviewDTO toDTO(Review review);
 }

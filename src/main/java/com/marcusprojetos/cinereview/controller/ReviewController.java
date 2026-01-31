@@ -2,6 +2,7 @@ package com.marcusprojetos.cinereview.controller;
 
 import com.marcusprojetos.cinereview.controller.dto.ErroResposta;
 import com.marcusprojetos.cinereview.controller.dto.FilmeDTO;
+import com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisaReviewDTO;
 import com.marcusprojetos.cinereview.controller.dto.ReviewDTO;
 import com.marcusprojetos.cinereview.controller.mappers.ReviewMapper;
 import com.marcusprojetos.cinereview.entities.Review;
@@ -9,11 +10,11 @@ import com.marcusprojetos.cinereview.exceptions.RegistroDuplicadoException;
 import com.marcusprojetos.cinereview.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,5 +30,25 @@ public class ReviewController implements GenericController {
         service.salvar(review);
         var url = gerarHeaderLocation(review.getId());
         return ResponseEntity.created(url).build();
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<ResultadoPesquisaReviewDTO> obterDetalhes(@PathVariable("id") String id){
+        return service.obterPorId(UUID.fromString(id))
+                .map(review -> {
+                var dto = mapper.toDTO(review);
+                return ResponseEntity.ok(dto);
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Object> deletar(@PathVariable("id") String id){
+        return service.obterPorId(UUID.fromString(id))
+                .map(review -> {
+                    service.deletar(review);
+                    return ResponseEntity.noContent().build();
+                        }
+                ).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
