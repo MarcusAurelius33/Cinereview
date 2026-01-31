@@ -27,6 +27,8 @@ public class Lista {
     //@JoinColumn(name = "filme_id")
     private List<Filme> filmes;
 
+
+
     public UUID getId() {
         return id;
     }

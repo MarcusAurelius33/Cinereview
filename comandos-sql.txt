@@ -1,10 +1,20 @@
-create table tb_filme (
+create table filme (
     id uuid not null primary key,
     titulo varchar(100) not null,
     sinopse varchar(500) not null,
     genero varchar(30) not null,
-    nota numeric(14,2) not null
+    nota numeric(14,2) not null,
+    data_cadastro timestamp,
+    data_atualizacao timestamp
+);
+
+
+create table review (
+    id uuid not null primary key,
+    id_filme uuid not null references filme(id),
+    texto varchar(5000) not null,
+    nota numeric(14,2) not null,
     data_cadastro timestamp,
     data_atualizacao timestamp,
     id_usuario uuid
-);
+   );
