@@ -42,10 +42,6 @@ public class Filme {
     @Column(name = "data_atualizacao")
     private LocalDate dataAtualizacao;
 
-
-    @Column(name = "id_usuario")
-    private UUID idUsuario;
-
     public UUID getId() {
         return id;
     }

@@ -2,11 +2,17 @@ package com.marcusprojetos.cinereview.entities;
 
 import jakarta.persistence.*;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@ToString
+@ToString(exclude = "filme")
+@EntityListeners(AuditingEntityListener.class)
 public class Review {
 
     @Id
@@ -14,15 +20,28 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    //@JoinColumn(name = "filme_id")
-    @OneToOne
+    @JoinColumn(name = "id_filme", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY)
     private Filme filme;
 
-    @Column(name = "comentário")
+    @Column(name = "texto", length = 5000, nullable = false)
     private String texto;
 
-    @Column(name = "nota")
-    private Double nota;
+    @Column(name = "nota", precision = 14, scale = 2, nullable = false)
+    private BigDecimal nota;
+
+    @CreatedDate
+    @Column(name = "data_cadastro")
+    private LocalDate dataCadastro;
+
+    @LastModifiedDate
+    @Column(name = "data_atualizacao")
+    private LocalDate dataAtualizacao;
+
+
+    @Column(name = "id_usuario")
+    private UUID idUsuario;
+
 
     public UUID getId() {
         return id;
@@ -48,11 +67,11 @@ public class Review {
         this.texto = texto;
     }
 
-    public Double getNota() {
+    public BigDecimal getNota() {
         return nota;
     }
 
-    public void setNota(Double nota) {
+    public void setNota(BigDecimal nota) {
         this.nota = nota;
     }
 }
