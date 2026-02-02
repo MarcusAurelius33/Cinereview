@@ -62,6 +62,5 @@ public class FilmeService {
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
         Example<Filme> filmeExample = Example.of(filme, matcher);
         return filmeRepository.findAll(filmeExample);
-
     }
 }

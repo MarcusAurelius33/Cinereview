@@ -14,7 +14,10 @@ import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,5 +53,24 @@ public class ReviewController implements GenericController {
                     return ResponseEntity.noContent().build();
                         }
                 ).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ResultadoPesquisaReviewDTO>> pesquisa(
+            @RequestParam(value = "titulo-filme", required = false)
+            String nomeFilme,
+            @RequestParam(value = "nota-review", required = false)
+            BigDecimal nota,
+            @RequestParam(value = "ano-review", required = false)
+            Integer anoPublicacao
+            )
+    {
+        var resultado = service.pesquisa(nomeFilme, nota, anoPublicacao);
+        var lista = resultado
+                .stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(lista);
     }
 }

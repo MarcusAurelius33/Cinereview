@@ -2,9 +2,13 @@ package com.marcusprojetos.cinereview.service;
 
 import com.marcusprojetos.cinereview.entities.Review;
 import com.marcusprojetos.cinereview.repository.ReviewRepository;
+import com.marcusprojetos.cinereview.repository.specs.ReviewSpecs;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,5 +28,25 @@ public class ReviewService {
 
     public void deletar(Review review){
         repository.delete(review);
+    }
+
+    public List<Review> pesquisa(
+            String nomeFilme, BigDecimal nota, Integer anoPublicacao){
+
+        Specification<Review> specs = Specification.where((root, query, cb) -> cb.conjunction());
+
+        if(nomeFilme != null){
+            specs = specs.and(ReviewSpecs.nomeFilmeLike(nomeFilme));
+        }
+
+        if(nota != null){
+            specs = specs.and(ReviewSpecs.notaReviewEqual(nota));
+        }
+
+        if(anoPublicacao != null){
+            specs = specs.and(ReviewSpecs.anoPublicacaoEqual(anoPublicacao));
+        }
+
+        return repository.findAll(specs);
     }
 }
