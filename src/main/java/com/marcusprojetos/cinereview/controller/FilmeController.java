@@ -62,8 +62,8 @@ public class FilmeController implements GenericController {
         @GetMapping
         public ResponseEntity<List<FilmeDTO>> pesquisar(
                 @RequestParam(value = "titulo", required = false) String titulo,
-                @RequestParam(value = "nota", required = false) Double nota){
-        List<Filme> resultado = service.pesquisaByExample(titulo, nota);
+                @RequestParam(value = "anoLancamento", required = false) Integer anoLancamento){
+        List<Filme> resultado = service.pesquisaByExample(titulo, anoLancamento);
         List<FilmeDTO> lista =  resultado.stream()
                 .map(mapper::toDTO).collect(Collectors.toList());
         return ResponseEntity.ok(lista);
@@ -81,7 +81,7 @@ public class FilmeController implements GenericController {
             filme.setTitulo(dto.titulo());
             filme.setSinopse(dto.sinopse());
             filme.setGeneroFilme(dto.generoFilme());
-            filme.setNota(dto.nota());
+            filme.setAnoLancamento(dto.anoLancamento());
 
             service.atualizar(filme);
 

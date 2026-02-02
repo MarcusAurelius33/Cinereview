@@ -12,12 +12,12 @@ public interface FilmeRepository extends JpaRepository<Filme, UUID> {
 
     List<Filme> findByTitulo(String titulo);
 
-    List<Filme> findByNota(Double nota);
+    List<Filme> findByAnoLancamento(Integer anoLancamento);
 
-    List<Filme> findByTituloAndNota(String titulo, Double nota);
+    List<Filme> findByTituloAndAnoLancamento(String titulo, Integer anoLancamento);
 
-    Optional<Filme> findByTituloAndSinopseAndGeneroFilmeAndNota(String titulo,
+    Optional<Filme> findByTituloAndSinopseAndGeneroFilmeAndAnoLancamento(String titulo,
                                                            String sinopse,
                                                            GeneroFilme generoFilme,
-                                                           Double nota);
+                                                           Integer anoLancamento);
 }

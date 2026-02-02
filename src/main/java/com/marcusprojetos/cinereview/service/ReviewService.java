@@ -49,4 +49,11 @@ public class ReviewService {
 
         return repository.findAll(specs);
     }
+
+    public void atualizar(Review review) {
+        if(review.getId() == null){
+            throw new IllegalArgumentException("Para atualizar, é necessário que o filme já tenha sido salvo!");
+        }
+        repository.save(review);
+    }
 }
