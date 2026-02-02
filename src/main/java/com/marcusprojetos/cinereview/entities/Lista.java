@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +22,7 @@ public class Lista {
     private String nome;
 
     @Column(name = "data_de_criaçãoo")
-    private LocalDate dataCriacao;
+    private LocalDateTime dataCriacao;
 
     @OneToMany
     //@JoinColumn(name = "filme_id")
@@ -45,11 +46,11 @@ public class Lista {
         this.nome = nome;
     }
 
-    public LocalDate getDataCriacao() {
+    public LocalDateTime getDataCriacao() {
         return dataCriacao;
     }
 
-    public void setDataCriacao(LocalDate dataCriacao) {
+    public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
 

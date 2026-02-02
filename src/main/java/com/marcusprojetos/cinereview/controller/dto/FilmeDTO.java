@@ -18,15 +18,15 @@ public record FilmeDTO(
         @NotNull(message = "campo obrigatório")
         GeneroFilme generoFilme,
         @NotNull(message = "campo obrigatório")
-        @Positive(message = "campo deve ser preenchido com um número positivo")
-        Double nota) {
+        Integer anoLancamento
+       ) {
 
     public Filme mapearParaFilme(){
         Filme filme = new Filme();
         filme.setTitulo(titulo);
         filme.setSinopse(sinopse);
         filme.setGeneroFilme(generoFilme);
-        filme.setNota(nota);
+        filme.setAnoLancamento(anoLancamento);
         return filme;
     }
 }

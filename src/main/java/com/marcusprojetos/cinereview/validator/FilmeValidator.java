@@ -22,11 +22,11 @@ public class FilmeValidator {
     }
 
     private boolean existeFilme(Filme filme){
-        Optional<Filme> filmeEncontrado = repository.findByTituloAndSinopseAndGeneroFilmeAndNota(
+        Optional<Filme> filmeEncontrado = repository.findByTituloAndSinopseAndGeneroFilmeAndAnoLancamento(
                 filme.getTitulo(),
                 filme.getSinopse(),
                 filme.getGeneroFilme(),
-                filme.getNota());
+                filme.getAnoLancamento());
 
         if (filme.getId() == null){
             return filmeEncontrado.isPresent();

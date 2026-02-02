@@ -8,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -27,8 +28,8 @@ public class Filme {
     @Column(name = "sinopse", length = 500, nullable = false)
     private String sinopse;
 
-    @Column(name = "nota", precision = 14)
-    private Double nota;
+    @Column(name = "ano_lancamento", nullable = false)
+    private Integer anoLancamento;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "genero", length = 100, nullable = false)
@@ -36,11 +37,35 @@ public class Filme {
 
     @CreatedDate
     @Column(name = "data_cadastro")
-    private LocalDate dataCadastro;
+    private LocalDateTime dataCadastro;
 
     @LastModifiedDate
     @Column(name = "data_atualizacao")
-    private LocalDate dataAtualizacao;
+    private LocalDateTime dataAtualizacao;
+
+    public LocalDateTime getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(LocalDateTime dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
+
+    public Integer getAnoLancamento() {
+        return anoLancamento;
+    }
+
+    public void setAnoLancamento(Integer anoLancamento) {
+        this.anoLancamento = anoLancamento;
+    }
+
+    public LocalDateTime getDataAtualizacao() {
+        return dataAtualizacao;
+    }
+
+    public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
+    }
 
     public UUID getId() {
         return id;
@@ -64,14 +89,6 @@ public class Filme {
 
     public void setSinopse(String sinopse) {
         this.sinopse = sinopse;
-    }
-
-    public Double getNota() {
-        return nota;
-    }
-
-    public void setNota(Double nota) {
-        this.nota = nota;
     }
 
     public GeneroFilme getGeneroFilme() {

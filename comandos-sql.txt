@@ -3,7 +3,7 @@ create table filme (
     titulo varchar(100) not null,
     sinopse varchar(500) not null,
     genero varchar(30) not null,
-    nota numeric(14,2) not null,
+    ano_lancamento INTEGER not null,
     data_cadastro timestamp,
     data_atualizacao timestamp
 );

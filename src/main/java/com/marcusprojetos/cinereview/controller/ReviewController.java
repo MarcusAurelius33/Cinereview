@@ -73,4 +73,21 @@ public class ReviewController implements GenericController {
 
         return ResponseEntity.ok(lista);
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Object> atualizar(@PathVariable ("id") String id, @RequestBody @Valid ReviewDTO dto){
+        return service.obterPorId(UUID.fromString(id))
+                .map(review -> {
+                    Review entidadeAux = mapper.toEntity(dto);
+
+                    review.setTexto(entidadeAux.getTexto());
+                    review.setNota(entidadeAux.getNota());
+
+                    service.atualizar(review);
+
+                    return ResponseEntity.noContent().build();
+
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }

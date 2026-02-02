@@ -39,21 +39,21 @@ public class FilmeService {
     public void deletar(Filme filme){
         filmeRepository.delete(filme);
     }
-    public List<Filme> pesquisa(String titulo, Double nota){
-        if(titulo!=null && nota!=null){
-            return filmeRepository.findByTituloAndNota(titulo, nota);
+    public List<Filme> pesquisa(String titulo, Integer anoLancamento){
+        if(titulo!=null && anoLancamento!=null){
+            return filmeRepository.findByTituloAndAnoLancamento(titulo, anoLancamento);
         }else if(titulo != null){
             return filmeRepository.findByTitulo(titulo);
-        }else if(nota != null){
-            return filmeRepository.findByNota(nota);
+        }else if(anoLancamento != null){
+            return filmeRepository.findByAnoLancamento(anoLancamento);
         }
         return filmeRepository.findAll();
     }
 
-    public List<Filme> pesquisaByExample(String titulo, Double nota){
+    public List<Filme> pesquisaByExample(String titulo, Integer anoLancamento){
         var filme = new Filme();
         filme.setTitulo(titulo);
-        filme.setNota(nota);
+        filme.setAnoLancamento(anoLancamento);
 
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnorePaths("id", "sinopse", "generoFilme")
