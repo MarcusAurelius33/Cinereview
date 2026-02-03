@@ -4,6 +4,9 @@ import com.marcusprojetos.cinereview.entities.Review;
 import com.marcusprojetos.cinereview.repository.ReviewRepository;
 import com.marcusprojetos.cinereview.repository.specs.ReviewSpecs;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +33,12 @@ public class ReviewService {
         repository.delete(review);
     }
 
-    public List<Review> pesquisa(
-            String nomeFilme, BigDecimal nota, Integer anoPublicacao){
+    public Page<Review> pesquisa(
+            String nomeFilme,
+            BigDecimal nota,
+            Integer anoPublicacao,
+            Integer pagina,
+            Integer tamanhoPagina){
 
         Specification<Review> specs = Specification.where((root, query, cb) -> cb.conjunction());
 
@@ -47,7 +54,9 @@ public class ReviewService {
             specs = specs.and(ReviewSpecs.anoPublicacaoEqual(anoPublicacao));
         }
 
-        return repository.findAll(specs);
+        Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
+
+        return repository.findAll(specs, pageRequest);
     }
 
     public void atualizar(Review review) {
