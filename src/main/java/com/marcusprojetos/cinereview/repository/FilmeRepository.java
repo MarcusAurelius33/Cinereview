@@ -3,12 +3,13 @@ package com.marcusprojetos.cinereview.repository;
 import com.marcusprojetos.cinereview.entities.Filme;
 import com.marcusprojetos.cinereview.entities.enums.GeneroFilme;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface FilmeRepository extends JpaRepository<Filme, UUID> {
+public interface FilmeRepository extends JpaRepository<Filme, UUID>, JpaSpecificationExecutor<Filme> {
 
     List<Filme> findByTitulo(String titulo);
 

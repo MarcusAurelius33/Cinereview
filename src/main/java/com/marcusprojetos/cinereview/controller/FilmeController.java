@@ -1,22 +1,20 @@
 package com.marcusprojetos.cinereview.controller;
 
-import com.marcusprojetos.cinereview.controller.dto.ErroResposta;
 import com.marcusprojetos.cinereview.controller.dto.FilmeDTO;
+import com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisaFilmeDTO;
 import com.marcusprojetos.cinereview.controller.mappers.FilmeMapper;
 import com.marcusprojetos.cinereview.entities.Filme;
-import com.marcusprojetos.cinereview.exceptions.RegistroDuplicadoException;
+import com.marcusprojetos.cinereview.entities.enums.GeneroFilme;
 import com.marcusprojetos.cinereview.service.FilmeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,13 +33,13 @@ public class FilmeController implements GenericController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<FilmeDTO> obterDetalhes(@PathVariable("id") String id){
+    public ResponseEntity<ResultadoPesquisaFilmeDTO> obterDetalhes(@PathVariable("id") String id){
         var idFilme = UUID.fromString(id);
 
         return service
                 .obterPorId(idFilme)
                 .map(filme -> {
-                    FilmeDTO dto = mapper.toDTO(filme);
+                    var dto = mapper.toDTO(filme);
                     return ResponseEntity.ok(dto);
                 }).orElseGet(() -> ResponseEntity.notFound().build());
         }
@@ -60,13 +58,18 @@ public class FilmeController implements GenericController {
         }
 
         @GetMapping
-        public ResponseEntity<List<FilmeDTO>> pesquisar(
+        public ResponseEntity<Page<ResultadoPesquisaFilmeDTO>> pesquisa(
                 @RequestParam(value = "titulo", required = false) String titulo,
-                @RequestParam(value = "anoLancamento", required = false) Integer anoLancamento){
-        List<Filme> resultado = service.pesquisaByExample(titulo, anoLancamento);
-        List<FilmeDTO> lista =  resultado.stream()
-                .map(mapper::toDTO).collect(Collectors.toList());
-        return ResponseEntity.ok(lista);
+                @RequestParam(value = "generoFilme", required = false) GeneroFilme generoFilme,
+                @RequestParam(value = "anoLancamento", required = false) Integer anoLancamento,
+                @RequestParam(value = "pagina", defaultValue = "0") Integer pagina,
+                @RequestParam(value = "tamanho-pagina", defaultValue = "10") Integer tamanhoPagina){
+
+            Page<Filme> paginaResultado = service.pesquisa(titulo, generoFilme, anoLancamento, pagina, tamanhoPagina);
+
+            Page<ResultadoPesquisaFilmeDTO> resultado = paginaResultado.map(mapper::toDTO);
+
+            return ResponseEntity.ok(resultado);
         }
 
         @PutMapping("{id}")
