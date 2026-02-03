@@ -11,6 +11,7 @@ import com.marcusprojetos.cinereview.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,22 +57,24 @@ public class ReviewController implements GenericController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ResultadoPesquisaReviewDTO>> pesquisa(
+    public ResponseEntity<Page<ResultadoPesquisaReviewDTO>> pesquisa(
             @RequestParam(value = "titulo-filme", required = false)
             String nomeFilme,
             @RequestParam(value = "nota-review", required = false)
             BigDecimal nota,
             @RequestParam(value = "ano-review", required = false)
-            Integer anoPublicacao
+            Integer anoPublicacao,
+            @RequestParam(value = "pagina", defaultValue = "0")
+            Integer pagina,
+            @RequestParam(value = "tamanho-pagina", defaultValue = "10")
+            Integer tamanhoPagina
             )
     {
-        var resultado = service.pesquisa(nomeFilme, nota, anoPublicacao);
-        var lista = resultado
-                .stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        Page<Review> paginaResultado = service.pesquisa(nomeFilme, nota, anoPublicacao, pagina, tamanhoPagina);
 
-        return ResponseEntity.ok(lista);
+        Page<ResultadoPesquisaReviewDTO> resultado = paginaResultado.map(mapper::toDTO);
+
+        return ResponseEntity.ok(resultado);
     }
 
     @PutMapping("{id}")

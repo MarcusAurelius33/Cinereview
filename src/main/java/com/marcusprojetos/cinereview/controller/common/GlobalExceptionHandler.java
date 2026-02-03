@@ -2,6 +2,7 @@ package com.marcusprojetos.cinereview.controller.common;
 
 import com.marcusprojetos.cinereview.controller.dto.ErroCampo;
 import com.marcusprojetos.cinereview.controller.dto.ErroResposta;
+import com.marcusprojetos.cinereview.exceptions.CampoInvalidoException;
 import com.marcusprojetos.cinereview.exceptions.OperacaoNaopermitidaException;
 import com.marcusprojetos.cinereview.exceptions.RegistroDuplicadoException;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,15 @@ public class GlobalExceptionHandler {
     public ErroResposta handleOperacaoNaoPermitidaException(OperacaoNaopermitidaException e){
         return ErroResposta.respostaPadrao(e.getMessage());
     }
+
+    @ExceptionHandler(CampoInvalidoException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_CONTENT)
+    public ErroResposta handleCampoInvalidoException(CampoInvalidoException e){
+        return new ErroResposta(HttpStatus.UNPROCESSABLE_CONTENT.value(),
+                "Erro de validação.",
+                List.of(new ErroCampo(e.getCampo(), e.getMessage())));
+    }
+
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
