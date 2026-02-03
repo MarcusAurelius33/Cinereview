@@ -40,7 +40,8 @@ public class ReviewService {
             Integer pagina,
             Integer tamanhoPagina){
 
-        Specification<Review> specs = Specification.where((root, query, cb) -> cb.conjunction());
+        Specification<Review> specs = Specification.where((root, query, cb) ->
+                cb.conjunction());
 
         if(nomeFilme != null){
             specs = specs.and(ReviewSpecs.nomeFilmeLike(nomeFilme));
