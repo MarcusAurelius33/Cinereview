@@ -1,0 +1,25 @@
+package com.marcusprojetos.cinereview.service;
+
+import com.marcusprojetos.cinereview.entities.Usuario;
+import com.marcusprojetos.cinereview.repository.UsuarioRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class UsuarioService {
+    private final UsuarioRepository repository;
+    private final PasswordEncoder passwordEncoder;
+
+    public void salvar(Usuario usuario){
+        var senha = usuario.getSenha();
+        usuario.setSenha(passwordEncoder.encode(senha));
+        repository.save(usuario);
+    }
+
+    public Usuario findByLogin(String login){
+        return repository.findByLogin(login);
+    }
+
+}

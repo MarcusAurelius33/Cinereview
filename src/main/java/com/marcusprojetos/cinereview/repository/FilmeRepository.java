@@ -11,11 +11,11 @@ import java.util.UUID;
 
 public interface FilmeRepository extends JpaRepository<Filme, UUID>, JpaSpecificationExecutor<Filme> {
 
-    List<Filme> findByTitulo(String titulo);
+//    List<Filme> findByTitulo(String titulo);
 
-    List<Filme> findByAnoLancamento(Integer anoLancamento);
+//    List<Filme> findByAnoLancamento(Integer anoLancamento);
 
-    List<Filme> findByTituloAndAnoLancamento(String titulo, Integer anoLancamento);
+//    List<Filme> findByTituloAndAnoLancamento(String titulo, Integer anoLancamento);
 
     Optional<Filme> findByTituloAndSinopseAndGeneroFilmeAndAnoLancamento(String titulo,
                                                            String sinopse,
