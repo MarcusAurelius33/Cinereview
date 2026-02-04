@@ -24,10 +24,12 @@ public class Lista {
     @Column(name = "data_de_criaçãoo")
     private LocalDateTime dataCriacao;
 
+    @Column(name = "id_usuario")
+    private UUID idUsuario;
+
     @OneToMany
     //@JoinColumn(name = "filme_id")
     private List<Filme> filmes;
-
 
 
     public UUID getId() {
