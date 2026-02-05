@@ -52,5 +52,19 @@ public class FilmeValidator {
         return !filme.getId().equals(filmeEncontrado.get().getId()) && filmeEncontrado.isPresent();
     }
 
+    public void validarAtualizacao(Filme filme){
+        Optional<Filme> filmeEncontrado = repository.findByTituloAndSinopseAndGeneroFilmeAndAnoLancamento(
+                filme.getTitulo(),
+                filme.getSinopse(),
+                filme.getGeneroFilme(),
+                filme.getAnoLancamento());
+        if (filmeEncontrado.isPresent()){
+            throw new RegistroDuplicadoException("filme já cadastrado!");
+        }
+
+        if(isAnoLancamentoFuturo(filme)){
+            throw new CampoInvalidoException("anoLancamento", "Filmes devem ter data de lançamento inferior a data de cadastro.");
+        }
+    }
 
 }

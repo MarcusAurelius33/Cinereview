@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -25,6 +26,7 @@ public class FilmeController implements GenericController {
     private final FilmeMapper mapper;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<Void> salvarFilme(@RequestBody @Valid FilmeDTO dto) {
             Filme filme = mapper.toEntity(dto);
             service.salvar(filme);
@@ -33,6 +35,7 @@ public class FilmeController implements GenericController {
     }
 
     @GetMapping("{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
     public ResponseEntity<ResultadoPesquisaFilmeDTO> obterDetalhes(@PathVariable("id") String id){
         var idFilme = UUID.fromString(id);
 
@@ -45,6 +48,7 @@ public class FilmeController implements GenericController {
         }
 
         @DeleteMapping("{id}")
+        @PreAuthorize("hasAnyRole('ADMIN')")
         public ResponseEntity<Void> deletarFilme(@PathVariable("id") String id){
             var idFilme = UUID.fromString(id);
             Optional<Filme> filme = service.obterPorId(idFilme);
@@ -58,6 +62,7 @@ public class FilmeController implements GenericController {
         }
 
         @GetMapping
+        @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
         public ResponseEntity<Page<ResultadoPesquisaFilmeDTO>> pesquisa(
                 @RequestParam(value = "titulo", required = false) String titulo,
                 @RequestParam(value = "generoFilme", required = false) GeneroFilme generoFilme,
@@ -73,21 +78,21 @@ public class FilmeController implements GenericController {
         }
 
         @PutMapping("{id}")
-        public ResponseEntity<Void> atualizar(@PathVariable("id") String id, @RequestBody FilmeDTO dto){
-            var idFilme = UUID.fromString(id);
-            Optional<Filme> filmeOptional = service.obterPorId(idFilme);
+        @PreAuthorize("hasAnyRole('ADMIN')")
+        public ResponseEntity<Object> atualizar(@PathVariable("id") String id, @RequestBody @Valid FilmeDTO dto){
+            return service.obterPorId(UUID.fromString(id))
+                    .map(filme -> {
+                        Filme entidadeAux = mapper.toEntity(dto);
 
-            if (filmeOptional.isEmpty()) {
-                return ResponseEntity.notFound().build();
-            }
-            var filme = filmeOptional.get();
-            filme.setTitulo(dto.titulo());
-            filme.setSinopse(dto.sinopse());
-            filme.setGeneroFilme(dto.generoFilme());
-            filme.setAnoLancamento(dto.anoLancamento());
+                        filme.setTitulo(entidadeAux.getTitulo());
+                        filme.setSinopse(entidadeAux.getSinopse());
+                        filme.setGeneroFilme(entidadeAux.getGeneroFilme());
+                        filme.setAnoLancamento(entidadeAux.getAnoLancamento());
 
-            service.atualizar(filme);
+                        service.atualizar(filme);
 
-            return ResponseEntity.noContent().build();
+                        return ResponseEntity.noContent().build();
+                    })
+                    .orElseGet(() -> ResponseEntity.notFound().build());
         }
 }
