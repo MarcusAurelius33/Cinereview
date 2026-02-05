@@ -1,8 +1,10 @@
 package com.marcusprojetos.cinereview.service;
 
 import com.marcusprojetos.cinereview.entities.Review;
+import com.marcusprojetos.cinereview.entities.Usuario;
 import com.marcusprojetos.cinereview.repository.ReviewRepository;
 import com.marcusprojetos.cinereview.repository.specs.ReviewSpecs;
+import com.marcusprojetos.cinereview.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,8 +22,11 @@ import java.util.UUID;
 public class ReviewService {
 
     private final ReviewRepository repository;
+    private final SecurityService securityService;
 
     public Review salvar(Review review) {
+        Usuario usuario = securityService.obterUsuarioLogado();
+        review.setUsuario(usuario);
         return repository.save(review);
     }
 

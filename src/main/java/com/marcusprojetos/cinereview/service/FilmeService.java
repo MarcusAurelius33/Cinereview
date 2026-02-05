@@ -5,6 +5,7 @@ import com.marcusprojetos.cinereview.entities.enums.GeneroFilme;
 import com.marcusprojetos.cinereview.exceptions.OperacaoNaopermitidaException;
 import com.marcusprojetos.cinereview.repository.FilmeRepository;
 import com.marcusprojetos.cinereview.repository.specs.FilmeSpecs;
+import com.marcusprojetos.cinereview.security.SecurityService;
 import com.marcusprojetos.cinereview.validator.FilmeValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -20,6 +21,7 @@ public class FilmeService {
 
     private final FilmeRepository filmeRepository;
     private final FilmeValidator validator;
+    private final SecurityService securityService;
 
     public Filme salvar(Filme filme){
         validator.validar(filme);
