@@ -63,7 +63,7 @@ public class FilmeValidator {
         }
 
         if(isAnoLancamentoFuturo(filme)){
-            throw new CampoInvalidoException("anoLancamento", "Filmes devem ter data de lançamento inferior a data de cadastro.");
+            throw new CampoInvalidoException("anoLancamento", "Filmes devem ter data de lançamento inferior a data de atualização.");
         }
     }
 

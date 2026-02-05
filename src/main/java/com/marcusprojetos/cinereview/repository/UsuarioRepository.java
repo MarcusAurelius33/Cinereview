@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface UsuarioRepository extends JpaRepository<Usuario, UUID>, JpaSpecificationExecutor<Usuario> {
 
     Usuario findByLogin(String login);
+
+
 }

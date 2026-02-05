@@ -6,6 +6,7 @@ import java.util.UUID;
 
 public record ResultadoPesquisaReviewDTO(
         UUID id,
+        String nomeUsuario,
         FilmeDTO filme,
         LocalDateTime dataCadastro,
         String texto,

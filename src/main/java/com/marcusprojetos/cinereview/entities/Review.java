@@ -1,6 +1,7 @@
 package com.marcusprojetos.cinereview.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Entity
 @ToString(exclude = "filme")
 @EntityListeners(AuditingEntityListener.class)
+@Data
 public class Review {
 
     @Id
@@ -35,13 +37,13 @@ public class Review {
     @Column(name = "data_cadastro")
     private LocalDateTime dataCadastro;
 
-    @LastModifiedDate
+    @CreatedDate
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
 
-
-    @Column(name = "id_usuario")
-    private UUID idUsuario;
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    private Usuario usuario;
 
     public LocalDateTime getDataCadastro() {
         return dataCadastro;
@@ -57,14 +59,6 @@ public class Review {
 
     public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
         this.dataAtualizacao = dataAtualizacao;
-    }
-
-    public UUID getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(UUID idUsuario) {
-        this.idUsuario = idUsuario;
     }
 
     public UUID getId() {
