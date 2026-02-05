@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -19,6 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfiguration {
 
     @Bean
@@ -34,10 +36,11 @@ public class SecurityConfiguration {
 
                     authorize.requestMatchers(HttpMethod.POST, "/usuarios/**").permitAll();
 
-                    authorize.requestMatchers(HttpMethod.DELETE, "/filmes/**").hasRole("ADMIN");
-                    authorize.requestMatchers(HttpMethod.POST, "/filmes/**").hasRole("ADMIN");
-                    authorize.requestMatchers(HttpMethod.PUT, "/filmes/**").hasRole("ADMIN");
-                    authorize.requestMatchers(HttpMethod.GET, "/filmes/**").hasAnyRole("ADMIN", "USER");
+                    //comentados pois a lógica será implementada na classe controle
+                    //authorize.requestMatchers(HttpMethod.DELETE, "/filmes/**").hasRole("ADMIN");
+                    //authorize.requestMatchers(HttpMethod.POST, "/filmes/**").hasRole("ADMIN");
+                    //authorize.requestMatchers(HttpMethod.PUT, "/filmes/**").hasRole("ADMIN");
+                    //authorize.requestMatchers(HttpMethod.GET, "/filmes/**").hasAnyRole("ADMIN", "USER");
 
                     authorize.requestMatchers("/reviews/**").hasAnyRole("ADMIN", "USER");
 

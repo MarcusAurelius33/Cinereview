@@ -6,6 +6,7 @@ import com.marcusprojetos.cinereview.exceptions.CampoInvalidoException;
 import com.marcusprojetos.cinereview.exceptions.OperacaoNaopermitidaException;
 import com.marcusprojetos.cinereview.exceptions.RegistroDuplicadoException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,7 +21,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_CONTENT)
-    public ErroResposta handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
+    public ErroResposta handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         List<FieldError> fieldErrors = e.getFieldErrors();
         List<ErroCampo> listaerros = fieldErrors.stream()
                 .map(fe -> new ErroCampo(fe
@@ -32,29 +33,34 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RegistroDuplicadoException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErroResposta handleRegistroDuplicadoExcepetion(RegistroDuplicadoException e){
+    public ErroResposta handleRegistroDuplicadoExcepetion(RegistroDuplicadoException e) {
         return ErroResposta.conflito(e.getMessage());
     }
 
     @ExceptionHandler(OperacaoNaopermitidaException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErroResposta handleOperacaoNaoPermitidaException(OperacaoNaopermitidaException e){
+    public ErroResposta handleOperacaoNaoPermitidaException(OperacaoNaopermitidaException e) {
         return ErroResposta.respostaPadrao(e.getMessage());
     }
 
     @ExceptionHandler(CampoInvalidoException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_CONTENT)
-    public ErroResposta handleCampoInvalidoException(CampoInvalidoException e){
+    public ErroResposta handleCampoInvalidoException(CampoInvalidoException e) {
         return new ErroResposta(HttpStatus.UNPROCESSABLE_CONTENT.value(),
                 "Erro de validação.",
                 List.of(new ErroCampo(e.getCampo(), e.getMessage())));
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErroResposta handleAcessDeniedException(AccessDeniedException e) {
+        return new ErroResposta(HttpStatus.FORBIDDEN.value(), "Acesso negado!", List.of());
+    }
+
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErroResposta handleErrosNaoTratados(RuntimeException e){
+    public ErroResposta handleErrosNaoTratados(RuntimeException e) {
         return new ErroResposta(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Ocorreu um erro inesperado, entre em contato com a administração.", List.of());
     }
-
 }

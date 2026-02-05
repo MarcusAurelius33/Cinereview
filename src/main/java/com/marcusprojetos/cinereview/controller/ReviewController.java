@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -29,6 +30,7 @@ public class ReviewController implements GenericController {
     private final ReviewMapper mapper;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Object> salvar(@RequestBody @Valid ReviewDTO dto){
         Review review = mapper.toEntity(dto);
         service.salvar(review);
@@ -37,6 +39,7 @@ public class ReviewController implements GenericController {
     }
 
     @GetMapping("{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<ResultadoPesquisaReviewDTO> obterDetalhes(@PathVariable("id") String id){
         return service.obterPorId(UUID.fromString(id))
                 .map(review -> {
@@ -47,6 +50,7 @@ public class ReviewController implements GenericController {
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Object> deletar(@PathVariable("id") String id){
         return service.obterPorId(UUID.fromString(id))
                 .map(review -> {
@@ -57,6 +61,7 @@ public class ReviewController implements GenericController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Page<ResultadoPesquisaReviewDTO>> pesquisa(
             @RequestParam(value = "titulo-filme", required = false)
             String nomeFilme,
@@ -78,6 +83,7 @@ public class ReviewController implements GenericController {
     }
 
     @PutMapping("{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Object> atualizar(@PathVariable ("id") String id, @RequestBody @Valid ReviewDTO dto){
         return service.obterPorId(UUID.fromString(id))
                 .map(review -> {

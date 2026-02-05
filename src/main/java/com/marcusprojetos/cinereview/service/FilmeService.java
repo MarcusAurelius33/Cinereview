@@ -2,6 +2,7 @@ package com.marcusprojetos.cinereview.service;
 
 import com.marcusprojetos.cinereview.entities.Filme;
 import com.marcusprojetos.cinereview.entities.enums.GeneroFilme;
+import com.marcusprojetos.cinereview.exceptions.OperacaoNaopermitidaException;
 import com.marcusprojetos.cinereview.repository.FilmeRepository;
 import com.marcusprojetos.cinereview.repository.specs.FilmeSpecs;
 import com.marcusprojetos.cinereview.validator.FilmeValidator;
@@ -26,10 +27,7 @@ public class FilmeService {
     }
 
     public void atualizar(Filme filme) {
-        if(filme.getId() == null){
-            throw new IllegalArgumentException("Para atualizar, é necessário que o filme já tenha sido salvo!");
-        }
-        validator.validar(filme);
+        validator.validarAtualizacao(filme);
         filmeRepository.save(filme);
     }
 
