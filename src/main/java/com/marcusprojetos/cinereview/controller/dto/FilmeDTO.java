@@ -8,7 +8,6 @@ import jakarta.validation.constraints.*;
 import java.util.UUID;
 
 public record FilmeDTO(
-        UUID id,
         @NotBlank(message = "campo obrigatório")
         @Size(min = 2, max = 100, message = "quantidade de caracteres não permitida")
         String titulo,
@@ -20,13 +19,4 @@ public record FilmeDTO(
         @NotNull(message = "campo obrigatório")
         Integer anoLancamento
        ) {
-
-    public Filme mapearParaFilme(){
-        Filme filme = new Filme();
-        filme.setTitulo(titulo);
-        filme.setSinopse(sinopse);
-        filme.setGeneroFilme(generoFilme);
-        filme.setAnoLancamento(anoLancamento);
-        return filme;
-    }
 }

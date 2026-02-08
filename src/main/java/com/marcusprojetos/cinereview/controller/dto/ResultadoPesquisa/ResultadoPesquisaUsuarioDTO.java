@@ -1,8 +1,4 @@
-package com.marcusprojetos.cinereview.controller.dto;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.UUID;
+package com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisa;
 
 public record ResultadoPesquisaUsuarioDTO(
         String nomeUsuario

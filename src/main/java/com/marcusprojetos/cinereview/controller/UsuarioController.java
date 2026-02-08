@@ -2,24 +2,28 @@ package com.marcusprojetos.cinereview.controller;
 
 import com.marcusprojetos.cinereview.controller.dto.UsuarioDTO;
 import com.marcusprojetos.cinereview.controller.mappers.UsuarioMapper;
+import com.marcusprojetos.cinereview.entities.Usuario;
 import com.marcusprojetos.cinereview.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("usuarios")
-public class UsuarioController {
+public class UsuarioController implements GenericController {
 
     private final UsuarioService service;
     private final UsuarioMapper mapper;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void salvar(@RequestBody @Valid UsuarioDTO dto){
-        var usuario = mapper.toEntity(dto);
+    public ResponseEntity<Object> salvar(@RequestBody @Valid UsuarioDTO dto){
+        Usuario usuario = mapper.toEntity(dto);
         service.salvar(usuario);
+        var url = gerarHeaderLocation(usuario.getId());
+        return ResponseEntity.created(url).build();
     }
 }

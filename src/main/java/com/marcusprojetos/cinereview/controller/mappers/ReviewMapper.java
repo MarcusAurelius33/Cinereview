@@ -1,7 +1,6 @@
 package com.marcusprojetos.cinereview.controller.mappers;
 
-import ch.qos.logback.core.model.ComponentModel;
-import com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisaReviewDTO;
+import com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisa.ResultadoPesquisaReviewDTO;
 import com.marcusprojetos.cinereview.controller.dto.ReviewDTO;
 import com.marcusprojetos.cinereview.entities.Review;
 import com.marcusprojetos.cinereview.repository.FilmeRepository;
