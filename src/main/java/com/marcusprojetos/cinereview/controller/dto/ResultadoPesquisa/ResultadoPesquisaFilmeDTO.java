@@ -1,8 +1,7 @@
-package com.marcusprojetos.cinereview.controller.dto;
+package com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisa;
 
 import com.marcusprojetos.cinereview.entities.enums.GeneroFilme;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 public record ResultadoPesquisaFilmeDTO(

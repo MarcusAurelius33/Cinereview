@@ -16,9 +16,8 @@ create table review (
     nota numeric(14,2) not null,
     data_cadastro timestamp,
     data_atualizacao timestamp,
-    id_usuario uuid
+    id_usuario uuid references usuario(id)
    );
-
 
 
 create table usuario (
@@ -26,4 +25,25 @@ create table usuario (
     login varchar(20) not null unique,
     senha varchar(300) not null,
     roles varchar[]
+);
+
+
+create table lista (
+    id uuid not null primary key,
+    id_usuario uuid not null references usuario(id),
+    titulo varchar(100) not null,
+    descricao varchar(1000) not null,
+    data_criacao timestamp,
+    data_modificacao timestamp
+);
+
+
+CREATE TABLE lista_filme (
+    lista_id UUID NOT NULL,
+    filme_id UUID NOT NULL,
+
+    CONSTRAINT fk_lista FOREIGN KEY (lista_id) REFERENCES lista (id) ON DELETE CASCADE,
+    CONSTRAINT fk_filme FOREIGN KEY (filme_id) REFERENCES filme (id) ON DELETE CASCADE,
+
+    PRIMARY KEY (lista_id, filme_id)
 );

@@ -24,4 +24,5 @@ public interface FilmeRepository extends JpaRepository<Filme, UUID>, JpaSpecific
                                                            String sinopse,
                                                            GeneroFilme generoFilme,
                                                            Integer anoLancamento);
+
 }

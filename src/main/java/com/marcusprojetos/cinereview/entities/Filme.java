@@ -2,6 +2,7 @@ package com.marcusprojetos.cinereview.entities;
 
 import com.marcusprojetos.cinereview.entities.enums.GeneroFilme;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Table(name = "filme")
 @ToString
 @EntityListeners(AuditingEntityListener.class)
+@Data
 public class Filme {
 
     @Id
@@ -43,59 +45,4 @@ public class Filme {
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
 
-    public LocalDateTime getDataCadastro() {
-        return dataCadastro;
-    }
-
-    public void setDataCadastro(LocalDateTime dataCadastro) {
-        this.dataCadastro = dataCadastro;
-    }
-
-    public Integer getAnoLancamento() {
-        return anoLancamento;
-    }
-
-    public void setAnoLancamento(Integer anoLancamento) {
-        this.anoLancamento = anoLancamento;
-    }
-
-    public LocalDateTime getDataAtualizacao() {
-        return dataAtualizacao;
-    }
-
-    public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
-        this.dataAtualizacao = dataAtualizacao;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getSinopse() {
-        return sinopse;
-    }
-
-    public void setSinopse(String sinopse) {
-        this.sinopse = sinopse;
-    }
-
-    public GeneroFilme getGeneroFilme() {
-        return generoFilme;
-    }
-
-    public void setGeneroFilme(GeneroFilme generoFilme) {
-        this.generoFilme = generoFilme;
-    }
 }

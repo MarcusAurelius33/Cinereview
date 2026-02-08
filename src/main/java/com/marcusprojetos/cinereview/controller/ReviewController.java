@@ -1,25 +1,19 @@
 package com.marcusprojetos.cinereview.controller;
 
-import com.marcusprojetos.cinereview.controller.dto.ErroResposta;
-import com.marcusprojetos.cinereview.controller.dto.FilmeDTO;
-import com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisaReviewDTO;
+import com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisa.ResultadoPesquisaReviewDTO;
 import com.marcusprojetos.cinereview.controller.dto.ReviewDTO;
 import com.marcusprojetos.cinereview.controller.mappers.ReviewMapper;
 import com.marcusprojetos.cinereview.entities.Review;
-import com.marcusprojetos.cinereview.exceptions.RegistroDuplicadoException;
 import com.marcusprojetos.cinereview.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor

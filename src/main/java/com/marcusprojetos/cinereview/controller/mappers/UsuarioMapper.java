@@ -1,10 +1,7 @@
 package com.marcusprojetos.cinereview.controller.mappers;
 
-import com.marcusprojetos.cinereview.controller.dto.FilmeDTO;
-import com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisaFilmeDTO;
-import com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisaUsuarioDTO;
+import com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisa.ResultadoPesquisaUsuarioDTO;
 import com.marcusprojetos.cinereview.controller.dto.UsuarioDTO;
-import com.marcusprojetos.cinereview.entities.Filme;
 import com.marcusprojetos.cinereview.entities.Usuario;
 import org.mapstruct.Mapper;
 
