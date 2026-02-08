@@ -4,18 +4,17 @@ import com.marcusprojetos.cinereview.entities.Filme;
 import com.marcusprojetos.cinereview.exceptions.CampoInvalidoException;
 import com.marcusprojetos.cinereview.exceptions.RegistroDuplicadoException;
 import com.marcusprojetos.cinereview.repository.FilmeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class FilmeValidator {
-    private FilmeRepository repository;
 
-    public FilmeValidator(FilmeRepository repository){
-        this.repository = repository;
-    }
+    private final FilmeRepository repository;
 
     public void validar(Filme filme){
         if (existeFilme(filme)){
