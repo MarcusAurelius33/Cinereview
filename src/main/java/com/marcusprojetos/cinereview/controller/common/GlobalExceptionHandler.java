@@ -3,6 +3,7 @@ package com.marcusprojetos.cinereview.controller.common;
 import com.marcusprojetos.cinereview.controller.dto.ErroCampo;
 import com.marcusprojetos.cinereview.controller.dto.ErroResposta;
 import com.marcusprojetos.cinereview.exceptions.CampoInvalidoException;
+import com.marcusprojetos.cinereview.exceptions.LoginEmUsoException;
 import com.marcusprojetos.cinereview.exceptions.OperacaoNaopermitidaException;
 import com.marcusprojetos.cinereview.exceptions.RegistroDuplicadoException;
 import org.springframework.http.HttpStatus;
@@ -41,6 +42,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErroResposta handleOperacaoNaoPermitidaException(OperacaoNaopermitidaException e) {
         return ErroResposta.respostaPadrao(e.getMessage());
+    }
+
+    @ExceptionHandler(LoginEmUsoException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErroResposta handleLoginEmUsoException(LoginEmUsoException e) {
+        return ErroResposta.conflito(e.getMessage());
     }
 
     @ExceptionHandler(CampoInvalidoException.class)
