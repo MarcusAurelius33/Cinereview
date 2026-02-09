@@ -30,10 +30,9 @@ public class SecurityConfiguration {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
-//                .formLogin(configuer -> {
-//                    configuer.loginPage("/login");
-//                })
-                .formLogin(Customizer.withDefaults())
+                .formLogin(configuer -> {
+                    configuer.loginPage("/login");
+                })
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers("/login").permitAll();
 
@@ -50,7 +49,9 @@ public class SecurityConfiguration {
                     authorize.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth2 -> {
-                    oauth2.successHandler(sucessHandler);
+                    oauth2
+                            .loginPage("/login")
+                            .successHandler(sucessHandler);
                 })
                 .build();
     }
