@@ -1,5 +1,6 @@
 package com.marcusprojetos.cinereview.controller.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -11,6 +12,9 @@ public record UsuarioDTO(
         @NotBlank(message = "campo obrigatório")
         String senha,
         @NotNull(message = "campo obrigatório")
-        List<String> roles
+        List<String> roles,
+        @Email(message = "Email inválido")
+        @NotNull(message = "campo obrigatório")
+        String email
 ) {
 }

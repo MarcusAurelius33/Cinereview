@@ -17,17 +17,21 @@ import java.util.UUID;
 public class Usuario {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column
+    @Column(name = "login")
     private String login;
 
-    @Column
+    @Column(name = "senha")
     private String senha;
 
     @Type(ListArrayType.class)
     @Column(name = "roles", columnDefinition = "varchar[]")
     private List<String> roles;
+
+    @Column(name = "email")
+    private String email;
 
 }

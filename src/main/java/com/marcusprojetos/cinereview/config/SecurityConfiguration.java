@@ -1,6 +1,7 @@
 package com.marcusprojetos.cinereview.config;
 
 import com.marcusprojetos.cinereview.security.CustomUserDetailService;
+import com.marcusprojetos.cinereview.security.LoginSocialSucessHandler;
 import com.marcusprojetos.cinereview.service.UsuarioService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,13 +26,14 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, LoginSocialSucessHandler sucessHandler) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
-                .formLogin(configuer -> {
-                    configuer.loginPage("/login");
-                })
+//                .formLogin(configuer -> {
+//                    configuer.loginPage("/login");
+//                })
+                .formLogin(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers("/login").permitAll();
 
@@ -46,6 +49,9 @@ public class SecurityConfiguration {
 
                     authorize.anyRequest().authenticated();
                 })
+                .oauth2Login(oauth2 -> {
+                    oauth2.successHandler(sucessHandler);
+                })
                 .build();
     }
 
@@ -55,7 +61,7 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder(10);
     }
 
-    @Bean
+//    @Bean
     public UserDetailsService userDetailsService(UsuarioService usuarioService){
 
     //    UserDetails user1 = User.builder()
@@ -73,5 +79,10 @@ public class SecurityConfiguration {
     //    return new InMemoryUserDetailsManager(user1, user2);
 
         return new CustomUserDetailService(usuarioService);
+    }
+
+    @Bean
+    public GrantedAuthorityDefaults grantedAuthorityDefaults(){
+        return new GrantedAuthorityDefaults("");
     }
 }
