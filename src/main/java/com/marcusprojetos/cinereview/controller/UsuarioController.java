@@ -25,5 +25,6 @@ public class UsuarioController implements GenericController {
         service.salvar(usuario);
         var url = gerarHeaderLocation(usuario.getId());
         return ResponseEntity.created(url).build();
+
     }
 }
