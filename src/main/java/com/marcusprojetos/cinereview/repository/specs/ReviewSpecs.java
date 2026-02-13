@@ -4,7 +4,6 @@ import com.marcusprojetos.cinereview.entities.Review;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 public class ReviewSpecs {
 

@@ -1,6 +1,5 @@
 package com.marcusprojetos.cinereview.controller.dto;
 
-import com.marcusprojetos.cinereview.entities.Filme;
 import com.marcusprojetos.cinereview.entities.enums.GeneroFilme;
 import jakarta.validation.constraints.*;
 

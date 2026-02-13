@@ -2,7 +2,6 @@ package com.marcusprojetos.cinereview.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 import java.util.UUID;
 

@@ -1,8 +1,7 @@
 package com.marcusprojetos.cinereview.config;
 
-import com.marcusprojetos.cinereview.security.CustomUserDetailService;
+import com.marcusprojetos.cinereview.security.JwtCustomAuthenticationFilter;
 import com.marcusprojetos.cinereview.security.LoginSocialSucessHandler;
-import com.marcusprojetos.cinereview.service.UsuarioService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,14 +11,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -28,10 +22,13 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, LoginSocialSucessHandler sucessHandler) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            LoginSocialSucessHandler sucessHandler,
+            JwtCustomAuthenticationFilter jwtCustomAuthenticationFilter) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(Customizer.withDefaults())
+                //.httpBasic(Customizer.withDefaults())
                 .formLogin(configuer -> {
                     configuer.loginPage("/login");
                 })
@@ -55,7 +52,9 @@ public class SecurityConfiguration {
                             .loginPage("/login")
                             .successHandler(sucessHandler);
                 })
-                .oauth2ResourceServer(oauth2RS -> oauth2RS.jwt(Customizer.withDefaults()))
+                .oauth2ResourceServer(oauth2RS ->
+                        oauth2RS.jwt(Customizer.withDefaults()))
+                .addFilterAfter(jwtCustomAuthenticationFilter, BearerTokenAuthenticationFilter.class)
                 .build();
     }
 

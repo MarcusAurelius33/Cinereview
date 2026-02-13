@@ -6,7 +6,6 @@ import com.marcusprojetos.cinereview.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component

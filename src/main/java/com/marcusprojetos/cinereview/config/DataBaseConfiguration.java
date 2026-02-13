@@ -41,7 +41,7 @@ public class DataBaseConfiguration {
 
         config.setMaximumPoolSize(10);
         config.setMinimumIdle(1);
-        config.setPoolName("library-db-pool");
+        config.setPoolName("cinereview-db-pool");
         config.setMaxLifetime(600000);
         config.setConnectionTimeout(100000);
 

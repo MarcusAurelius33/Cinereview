@@ -1,12 +1,13 @@
 package com.marcusprojetos.cinereview.entities;
 
 import io.hypersistence.utils.hibernate.type.array.ListArrayType;
-import io.hypersistence.utils.hibernate.type.array.internal.ListArrayTypeDescriptor;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,7 +15,10 @@ import java.util.UUID;
 @Table(name = "usuario")
 @Data
 @EntityListeners(AuditingEntityListener.class)
-public class Usuario {
+public class Usuario implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "id")

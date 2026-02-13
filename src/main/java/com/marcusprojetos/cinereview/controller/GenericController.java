@@ -1,6 +1,5 @@
 package com.marcusprojetos.cinereview.controller;
 
-import jakarta.servlet.Servlet;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;

@@ -3,23 +3,13 @@ package com.marcusprojetos.cinereview.security;
 import com.marcusprojetos.cinereview.entities.Client;
 import com.marcusprojetos.cinereview.service.ClientService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.annotation.Order;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.authorization.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
-import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
-import java.util.UUID;
 
 
 @Component
@@ -27,35 +17,47 @@ import java.util.UUID;
 public class CustomRegisteredClientRepository implements RegisteredClientRepository {
 
     private final ClientService clientService;
-    private final ClientSettings clientSettings;
     private final TokenSettings tokenSettings;
+    private final ClientSettings clientSettings;
 
     @Override
-    public void save(RegisteredClient registeredClient) {
-
-    }
+    public void save(RegisteredClient registeredClient) {}
 
     @Override
     public RegisteredClient findById(String id) {
-        return null;
+        var client = clientService.obterPorId(id);
+        return client != null ? toRegisteredClient(client) : null;
     }
 
     @Override
     public RegisteredClient findByClientId(String clientId) {
         var client = clientService.obterPorClientID(clientId);
 
-        if (client == null){
+        if (client == null) {
+            System.out.println("DEBUG: Cliente não encontrado no banco: " + clientId);
             return null;
         }
 
+        System.out.println("DEBUG: Cliente carregado: " + client.getClientId());
+        System.out.println("DEBUG: Redirect URI do banco: [" + client.getRedirectURI() + "]");
+        System.out.println("DEBUG: Scope do banco: [" + client.getScope() + "]");
+
+        return toRegisteredClient(client);
+    }
+
+    private RegisteredClient toRegisteredClient(Client client) {
+        String redirectUri = client.getRedirectURI().trim();
+        String scope = client.getScope().trim();
+
         return RegisteredClient.withId(client.getId().toString())
-                .clientId(client.getClientId())
+                .clientId(client.getClientId().trim())
                 .clientSecret(client.getClientSecret())
-                .redirectUri(client.getRedirectURI())
-                .scope(client.getScope())
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                .redirectUri(redirectUri)
+                .scope(scope)
                 .tokenSettings(tokenSettings)
                 .clientSettings(clientSettings)
                 .build();

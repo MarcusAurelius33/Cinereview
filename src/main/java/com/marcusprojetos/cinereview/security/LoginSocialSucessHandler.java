@@ -2,7 +2,6 @@ package com.marcusprojetos.cinereview.security;
 
 import com.marcusprojetos.cinereview.entities.Usuario;
 import com.marcusprojetos.cinereview.service.UsuarioService;
-import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -3,8 +3,6 @@ package com.marcusprojetos.cinereview.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
