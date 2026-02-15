@@ -7,6 +7,9 @@ import com.marcusprojetos.cinereview.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +23,16 @@ public class ListaService {
         lista.setUsuario(usuario);
         repository.save(lista);
     }
+
+    public void deletar(Lista lista){
+        repository.delete(lista);
+    }
+
+    public Optional<Lista> obterPorId(UUID id){
+        return repository.findById(id);
+    }
+
+
 
 /*
     public Optional<Review> obterPorId(UUID id){

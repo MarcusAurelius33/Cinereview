@@ -6,6 +6,10 @@ import com.marcusprojetos.cinereview.controller.mappers.FilmeMapper;
 import com.marcusprojetos.cinereview.entities.Filme;
 import com.marcusprojetos.cinereview.entities.enums.GeneroFilme;
 import com.marcusprojetos.cinereview.service.FilmeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,6 +24,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("filmes")
+@Tag(name = "Filmes")
 public class FilmeController implements GenericController {
 
     private final FilmeService service;
@@ -27,6 +32,12 @@ public class FilmeController implements GenericController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(summary = "Salvar", description = "Cadastrar novo filme")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Filme cadastrado."),
+            @ApiResponse(responseCode = "422", description = "Erro de validação."),
+            @ApiResponse(responseCode = "409", description = "Filme já cadastrado!")
+    })
     public ResponseEntity<Void> salvarFilme(@RequestBody @Valid FilmeDTO dto) {
             Filme filme = mapper.toEntity(dto);
             service.salvar(filme);
@@ -36,6 +47,11 @@ public class FilmeController implements GenericController {
 
     @GetMapping("{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
+    @Operation(summary = "Pesquisa(ID)", description = "Obter os dados de um filme usando o ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Filme encontrado."),
+            @ApiResponse(responseCode = "404", description = "Filme não encontrado!")
+    })
     public ResponseEntity<ResultadoPesquisaFilmeDTO> obterDetalhes(@PathVariable("id") String id){
         var idFilme = UUID.fromString(id);
 
@@ -49,6 +65,11 @@ public class FilmeController implements GenericController {
 
         @DeleteMapping("{id}")
         @PreAuthorize("hasAnyRole('ADMIN')")
+        @Operation(summary = "Deletar", description = "Deleta um filme cadastrado")
+        @ApiResponses({
+                @ApiResponse(responseCode = "204", description = "Filme deletado."),
+                @ApiResponse(responseCode = "404", description = "Filme não encontrado!"),
+        })
         public ResponseEntity<Void> deletarFilme(@PathVariable("id") String id){
             var idFilme = UUID.fromString(id);
             Optional<Filme> filme = service.obterPorId(idFilme);
@@ -63,6 +84,10 @@ public class FilmeController implements GenericController {
 
         @GetMapping
         @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
+        @Operation(summary = "Pesquisa", description = "Pesquisa filmes cadastrados a partir de parâmetros")
+        @ApiResponses({
+                @ApiResponse(responseCode = "200", description = "Filme encontrado."),
+        })
         public ResponseEntity<Page<ResultadoPesquisaFilmeDTO>> pesquisa(
                 @RequestParam(value = "titulo", required = false) String titulo,
                 @RequestParam(value = "generoFilme", required = false) GeneroFilme generoFilme,
@@ -79,6 +104,12 @@ public class FilmeController implements GenericController {
 
         @PutMapping("{id}")
         @PreAuthorize("hasAnyRole('ADMIN')")
+        @Operation(summary = "Atualizar", description = "Atualiza as informações de um filme cadastrado")
+        @ApiResponses({
+                @ApiResponse(responseCode = "204", description = "Filme atualizado."),
+                @ApiResponse(responseCode = "404", description = "Filme não encontrado!"),
+                @ApiResponse(responseCode = "409", description = "Filme já cadastrado!")
+        })
         public ResponseEntity<Object> atualizar(@PathVariable("id") String id, @RequestBody @Valid FilmeDTO dto){
             return service.obterPorId(UUID.fromString(id))
                     .map(filme -> {

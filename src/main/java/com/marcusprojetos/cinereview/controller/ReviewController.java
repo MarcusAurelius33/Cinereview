@@ -5,6 +5,11 @@ import com.marcusprojetos.cinereview.controller.dto.ReviewDTO;
 import com.marcusprojetos.cinereview.controller.mappers.ReviewMapper;
 import com.marcusprojetos.cinereview.entities.Review;
 import com.marcusprojetos.cinereview.service.ReviewService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +23,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("reviews")
+@Tag(name = "Reviews")
 public class ReviewController implements GenericController {
 
     private final ReviewService service;
@@ -25,6 +31,12 @@ public class ReviewController implements GenericController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Cadastrar", description = "Cadastrar novo review")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Review cadastrado."),
+            @ApiResponse(responseCode = "422", description = "Erro de validação."),
+            @ApiResponse(responseCode = "409", description = "O usuário já possui um review desse filme!")
+    })
     public ResponseEntity<Object> salvar(@RequestBody @Valid ReviewDTO dto){
         Review review = mapper.toEntity(dto);
         service.salvar(review);
@@ -34,6 +46,11 @@ public class ReviewController implements GenericController {
 
     @GetMapping("{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Pesquisa(ID)", description = "Obter os dados de um review usando o ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Review encontrado."),
+            @ApiResponse(responseCode = "404", description = "Review não encontrado!")
+    })
     public ResponseEntity<ResultadoPesquisaReviewDTO> obterDetalhes(@PathVariable("id") String id){
         return service.obterPorId(UUID.fromString(id))
                 .map(review -> {
@@ -45,6 +62,11 @@ public class ReviewController implements GenericController {
 
     @DeleteMapping("{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Deletar", description = "Deleta um review cadastrado")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Review deletado."),
+            @ApiResponse(responseCode = "404", description = "Review não encontrado!")
+    })
     public ResponseEntity<Object> deletar(@PathVariable("id") String id){
         return service.obterPorId(UUID.fromString(id))
                 .map(review -> {
@@ -56,6 +78,10 @@ public class ReviewController implements GenericController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Pesquisa", description = "Pesquisa reviews cadastrados a partir de parâmetros")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Review encontrado."),
+    })
     public ResponseEntity<Page<ResultadoPesquisaReviewDTO>> pesquisa(
             @RequestParam(value = "titulo-filme", required = false)
             String nomeFilme,
@@ -78,6 +104,12 @@ public class ReviewController implements GenericController {
 
     @PutMapping("{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Atualizar", description = "Atualiza as informações de um review cadastrado")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Review atualizado."),
+            @ApiResponse(responseCode = "404", description = "Review não encontrado!"),
+            @ApiResponse(responseCode = "409", description = "Review já cadastrado!")
+    })
     public ResponseEntity<Object> atualizar(@PathVariable ("id") String id, @RequestBody @Valid ReviewDTO dto){
         return service.obterPorId(UUID.fromString(id))
                 .map(review -> {

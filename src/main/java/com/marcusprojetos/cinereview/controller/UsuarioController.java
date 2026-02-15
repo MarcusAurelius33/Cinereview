@@ -4,6 +4,7 @@ import com.marcusprojetos.cinereview.controller.dto.UsuarioDTO;
 import com.marcusprojetos.cinereview.controller.mappers.UsuarioMapper;
 import com.marcusprojetos.cinereview.entities.Usuario;
 import com.marcusprojetos.cinereview.service.UsuarioService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("usuarios")
+@Tag(name = "Usuários")
 public class UsuarioController implements GenericController {
 
     private final UsuarioService service;

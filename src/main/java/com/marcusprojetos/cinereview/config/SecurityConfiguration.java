@@ -9,6 +9,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
@@ -36,13 +37,6 @@ public class SecurityConfiguration {
                     authorize.requestMatchers("/login").permitAll();
 
                     authorize.requestMatchers(HttpMethod.POST, "/usuarios/**").permitAll();
-
-                    //comentados pois a lógica será implementada na classe controle
-                    //authorize.requestMatchers(HttpMethod.DELETE, "/filmes/**").hasRole("ADMIN");
-                    //authorize.requestMatchers(HttpMethod.POST, "/filmes/**").hasRole("ADMIN");
-                    //authorize.requestMatchers(HttpMethod.PUT, "/filmes/**").hasRole("ADMIN");
-                    //authorize.requestMatchers(HttpMethod.GET, "/filmes/**").hasAnyRole("ADMIN", "USER");
-
                     authorize.requestMatchers("/reviews/**").hasAnyRole("ADMIN", "USER");
 
                     authorize.anyRequest().authenticated();
@@ -56,6 +50,20 @@ public class SecurityConfiguration {
                         oauth2RS.jwt(Customizer.withDefaults()))
                 .addFilterAfter(jwtCustomAuthenticationFilter, BearerTokenAuthenticationFilter.class)
                 .build();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(){
+        return web -> {
+            web.ignoring().requestMatchers(
+                    "/v2/api-docs/**",
+                    "/v3/api-docs/**",
+                    "/swagger-reosources/**",
+                    "/swaggwer-ui.html",
+                    "/swagger-ui/**",
+                    "/webjars/**"
+            );
+        };
     }
 
     @Bean
