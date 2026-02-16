@@ -54,6 +54,20 @@ public class ListaController implements GenericController {
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
-
+    @PostMapping("{idLista}/filmes/{idFilme}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Adicionar Filme", description = "Adiciona um filme específico a uma lista existente")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Filme adicionado com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Lista ou Filme não encontrado."),
+            @ApiResponse(responseCode = "400", description = "Operação não permitida."),
+            @ApiResponse(responseCode = "409", description = "Filme já existe na lista.")
+    })
+    public ResponseEntity<Object> adicionarFilme(
+            @PathVariable("idLista") String idLista,
+            @PathVariable("idFilme") String idFilme)
+    {
+        service.adicionarFilme(UUID.fromString(idLista), UUID.fromString(idFilme));
+        return ResponseEntity.noContent().build();
+    }
 }

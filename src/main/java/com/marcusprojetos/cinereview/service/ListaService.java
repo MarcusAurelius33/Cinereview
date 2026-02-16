@@ -1,12 +1,17 @@
 package com.marcusprojetos.cinereview.service;
 
+import com.marcusprojetos.cinereview.entities.Filme;
 import com.marcusprojetos.cinereview.entities.Lista;
 import com.marcusprojetos.cinereview.entities.Usuario;
+import com.marcusprojetos.cinereview.exceptions.OperacaoNaopermitidaException;
+import com.marcusprojetos.cinereview.exceptions.RegistroDuplicadoException;
 import com.marcusprojetos.cinereview.repository.ListaRepository;
 import com.marcusprojetos.cinereview.security.SecurityService;
+import com.marcusprojetos.cinereview.validator.ListaValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,12 +20,17 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ListaService {
 
+    private final FilmeService filmeService;
     private final ListaRepository repository;
     private final SecurityService securityService;
+    private final ListaValidator validator;
 
     public void salvar(Lista lista) {
         Usuario usuario = securityService.obterUsuarioLogado();
         lista.setUsuario(usuario);
+
+        validator.validarLista(lista);
+
         repository.save(lista);
     }
 
@@ -32,50 +42,16 @@ public class ListaService {
         return repository.findById(id);
     }
 
+    public void adicionarFilme(UUID idLista, UUID idFilme) {
 
+        validator.validarAdicao(idLista, idFilme);
 
-/*
-    public Optional<Review> obterPorId(UUID id){
-        return repository.findById(id);
+        Optional<Lista> lista = obterPorId(idLista);
+        Optional<Filme> filme = filmeService.obterPorId(idFilme);
+
+        lista.get().getFilmes().add(filme.get());
+        lista.get().setDataModificacao(LocalDateTime.now());
+
+        repository.save(lista.get());
     }
-
-    public void deletar(Review review){
-        repository.delete(review);
-    }
-
-    public Page<Review> pesquisa(
-            String nomeFilme,
-            BigDecimal nota,
-            Integer anoPublicacao,
-            Integer pagina,
-            Integer tamanhoPagina){
-
-        Specification<Review> specs = Specification.where((root, query, cb) ->
-                cb.conjunction());
-
-        if(nomeFilme != null){
-            specs = specs.and(ReviewSpecs.nomeFilmeLike(nomeFilme));
-        }
-
-        if(nota != null){
-            specs = specs.and(ReviewSpecs.notaReviewEqual(nota));
-        }
-
-        if(anoPublicacao != null){
-            specs = specs.and(ReviewSpecs.anoPublicacaoEqual(anoPublicacao));
-        }
-
-        Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
-
-        return repository.findAll(specs, pageRequest);
-    }
-
-    public void atualizar(Review review) {
-        if(review.getId() == null){
-            throw new IllegalArgumentException("Para atualizar, é necessário que o filme já tenha sido salvo!");
-        }
-        repository.save(review);
-    }
-*/
-
 }

@@ -26,7 +26,7 @@ public class FilmeValidator {
         }
     }
 
-    public boolean isAnoLancamentoFuturo(Filme filme) {
+    private boolean isAnoLancamentoFuturo(Filme filme) {
         if (filme.getAnoLancamento() == null) {
             return false;
         }

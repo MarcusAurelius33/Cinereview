@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -32,7 +33,7 @@ public class Lista {
     @Column(name = "data_criacao")
     private LocalDateTime dataCriacao;
 
-    @CreatedDate
+    @LastModifiedDate
     @Column(name = "data_modificacao")
     private LocalDateTime dataModificacao;
 
@@ -40,9 +41,9 @@ public class Lista {
     @JoinColumn (name = "id_usuario")
     private Usuario usuario;
 
-    @ManyToMany // Use ManyToMany pois um filme pode estar em várias listas
+    @ManyToMany
     @JoinTable(
-            name = "lista_filme", // Nome da nova tabela de ligação
+            name = "lista_filme",
             joinColumns = @JoinColumn(name = "lista_id"),
             inverseJoinColumns = @JoinColumn(name = "filme_id")
     )
