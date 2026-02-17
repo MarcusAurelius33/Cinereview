@@ -34,9 +34,11 @@ public class ListaService {
         repository.save(lista);
     }
 
+
     public void deletar(Lista lista){
         repository.delete(lista);
     }
+
 
     public Optional<Lista> obterPorId(UUID id){
         return repository.findById(id);
@@ -44,14 +46,16 @@ public class ListaService {
 
     public void adicionarFilme(UUID idLista, UUID idFilme) {
 
-        validator.validarAdicao(idLista, idFilme);
+        Lista listaAux = validator.validarAdicao(idLista, idFilme);
 
-        Optional<Lista> lista = obterPorId(idLista);
-        Optional<Filme> filme = filmeService.obterPorId(idFilme);
+        repository.save(listaAux);
+    }
 
-        lista.get().getFilmes().add(filme.get());
-        lista.get().setDataModificacao(LocalDateTime.now());
 
-        repository.save(lista.get());
+    public void excluirFilme(UUID idLista, UUID idFilme) {
+
+        Lista listaAux = validator.validarExclusao(idLista, idFilme);
+
+        repository.save(listaAux);
     }
 }

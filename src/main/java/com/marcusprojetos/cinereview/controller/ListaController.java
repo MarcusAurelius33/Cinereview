@@ -30,6 +30,7 @@ public class ListaController implements GenericController {
     @Operation(summary = "Criar", description = "Criar uma lista de filmes cadastrados")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Lista criada."),
+            @ApiResponse(responseCode = "409", description = "O usuário já possui uma lista com esse nome!"),
             @ApiResponse(responseCode = "422", description = "Erro de validação!"),
     })
     public ResponseEntity<Object> criar(@RequestBody @Valid ListaDTO dto){
@@ -68,6 +69,23 @@ public class ListaController implements GenericController {
             @PathVariable("idFilme") String idFilme)
     {
         service.adicionarFilme(UUID.fromString(idLista), UUID.fromString(idFilme));
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("{idLista}/filmes/{idFilme}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Excluir Filme", description = "Exclui um filme específico de uma lista existente")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Filme excluido com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Lista ou Filme não encontrado."),
+            @ApiResponse(responseCode = "400", description = "Operação não permitida."),
+            @ApiResponse(responseCode = "409", description = "Filme não existe na lista.")
+    })
+    public ResponseEntity<Object> excluirFilme(
+            @PathVariable("idLista") String idLista,
+            @PathVariable("idFilme") String idFilme)
+    {
+        service.excluirFilme(UUID.fromString(idLista), UUID.fromString(idFilme));
         return ResponseEntity.noContent().build();
     }
 }

@@ -3,6 +3,7 @@ package com.marcusprojetos.cinereview.validator;
 import com.marcusprojetos.cinereview.entities.Filme;
 import com.marcusprojetos.cinereview.entities.Lista;
 import com.marcusprojetos.cinereview.entities.Usuario;
+import com.marcusprojetos.cinereview.exceptions.CampoInvalidoException;
 import com.marcusprojetos.cinereview.exceptions.OperacaoNaopermitidaException;
 import com.marcusprojetos.cinereview.exceptions.RegistroDuplicadoException;
 import com.marcusprojetos.cinereview.repository.FilmeRepository;
@@ -11,6 +12,7 @@ import com.marcusprojetos.cinereview.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,9 +31,11 @@ public class ListaValidator {
         }
     }
 
-    public void validarAdicao(UUID idLista, UUID idFilme){
+
+    public Lista validarAdicao(UUID idLista, UUID idFilme){
+        //Buscar lista
         Lista lista = repository.findById(idLista)
-                .orElseThrow(() -> new IllegalArgumentException("Lista não encontrada."));
+                .orElseThrow(() -> new CampoInvalidoException("idLista", "Lista não encontrada."));
 
         //segurança
         Usuario usuarioLogado = securityService.obterUsuarioLogado();
@@ -41,14 +45,43 @@ public class ListaValidator {
 
         //Busca o filme
         Filme filme = filmeRepository.findById(idFilme)
-                .orElseThrow(() -> new IllegalArgumentException("Filme não encontrado."));
+                .orElseThrow(() -> new CampoInvalidoException("idFilme", "Filme não encontrado."));
 
         // filme duplicado
         if (lista.getFilmes().contains(filme)) {
             throw new RegistroDuplicadoException("Este filme já está na sua lista!");
         }
-
+        lista.getFilmes().add(filme);
+        lista.setDataModificacao(LocalDateTime.now());
+        return lista;
     }
+
+
+    public Lista validarExclusao(UUID idLista, UUID idFilme) {
+        //Busca a lista
+        Lista lista = repository.findById(idLista)
+                .orElseThrow(() -> new CampoInvalidoException("idLista", "Lista não encontrada."));
+
+        //segurança
+        Usuario usuarioLogado = securityService.obterUsuarioLogado();
+        if (!lista.getUsuario().getId().equals(usuarioLogado.getId())) {
+            throw new OperacaoNaopermitidaException("Você não tem permissão para alterar esta lista.");
+        }
+
+        //Busca o filme
+        Filme filme = filmeRepository.findById(idFilme)
+                .orElseThrow(() -> new CampoInvalidoException("idFilme", "Filme não encontrado."));
+
+        // filme duplicado
+        if (!lista.getFilmes().contains(filme)) {
+            throw new RegistroDuplicadoException("O filme não está na lista!");
+        }
+
+        lista.getFilmes().remove(filme);
+        lista.setDataModificacao(LocalDateTime.now());
+        return lista;
+    }
+
 
     private boolean existeListaUsuario(Lista lista) {
         Optional<Lista> listaEncontrada = repository.findByTituloAndUsuario(
