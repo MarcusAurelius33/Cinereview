@@ -52,6 +52,13 @@ public class CustomRegisteredClientRepository implements RegisteredClientReposit
         return RegisteredClient.withId(client.getId().toString())
                 .clientId(client.getClientId().trim())
                 .clientSecret(client.getClientSecret())
+
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
+
+                .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
+
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)

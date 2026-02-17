@@ -25,3 +25,7 @@ spring:
 
 springdoc:
   override-with-generic-response: false
+  swagger-ui:
+    oauth:
+      use-pkce-with-authorization-code-grant: true
+      client-id: swagger-client

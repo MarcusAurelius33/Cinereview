@@ -20,7 +20,7 @@ public class ReviewValidator {
             throw new RegistroDuplicadoException("O usuário já possui um review desse filme!");
         }
     }
-
+    
     private boolean existeReviewDoUsuario(Review review){
         Optional<Review> reviewAux = reviewRepository.findByFilmeAndUsuario(review.getFilme(), review.getUsuario());
         return reviewAux.isPresent();
