@@ -79,7 +79,7 @@ public class ListaController implements GenericController {
             @ApiResponse(responseCode = "204", description = "Filme excluido com sucesso."),
             @ApiResponse(responseCode = "404", description = "Lista ou Filme não encontrado."),
             @ApiResponse(responseCode = "400", description = "Operação não permitida."),
-            @ApiResponse(responseCode = "409", description = "Filme não existe na lista.")
+            @ApiResponse(responseCode = "400", description = "Filme não existe na lista.")
     })
     public ResponseEntity<Object> excluirFilme(
             @PathVariable("idLista") String idLista,

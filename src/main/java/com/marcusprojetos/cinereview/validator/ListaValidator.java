@@ -65,7 +65,7 @@ public class ListaValidator {
         //segurança
         Usuario usuarioLogado = securityService.obterUsuarioLogado();
         if (!lista.getUsuario().getId().equals(usuarioLogado.getId())) {
-            throw new OperacaoNaopermitidaException("Você não tem permissão para alterar esta lista.");
+            throw new OperacaoNaopermitidaException("Você não tem permissão para alterar esta lista!");
         }
 
         //Busca o filme
@@ -74,7 +74,7 @@ public class ListaValidator {
 
         // filme duplicado
         if (!lista.getFilmes().contains(filme)) {
-            throw new RegistroDuplicadoException("O filme não está na lista!");
+            throw new OperacaoNaopermitidaException("O filme não está na lista!");
         }
 
         lista.getFilmes().remove(filme);

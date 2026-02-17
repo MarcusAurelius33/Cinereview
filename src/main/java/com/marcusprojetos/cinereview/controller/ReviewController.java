@@ -65,6 +65,7 @@ public class ReviewController implements GenericController {
     @Operation(summary = "Deletar", description = "Deleta um review cadastrado")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Review deletado."),
+            @ApiResponse(responseCode = "400", description = "Você não tem permissão para excluir esta review!"),
             @ApiResponse(responseCode = "404", description = "Review não encontrado!")
     })
     public ResponseEntity<Object> deletar(@PathVariable("id") String id){
@@ -107,6 +108,7 @@ public class ReviewController implements GenericController {
     @Operation(summary = "Atualizar", description = "Atualiza as informações de um review cadastrado")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Review atualizado."),
+            @ApiResponse(responseCode = "400", description = "Você não tem permissão para alterar esta review!"),
             @ApiResponse(responseCode = "404", description = "Review não encontrado!"),
             @ApiResponse(responseCode = "409", description = "Review já cadastrado!")
     })

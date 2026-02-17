@@ -37,6 +37,7 @@ public class ReviewService {
     }
 
     public void deletar(Review review){
+        reviewValidator.validarExclusao(review);
         repository.delete(review);
     }
 
@@ -68,9 +69,7 @@ public class ReviewService {
     }
 
     public void atualizar(Review review) {
-        if(review.getId() == null){
-            throw new IllegalArgumentException("Para atualizar, é necessário que o filme já tenha sido salvo!");
-        }
+        reviewValidator.validarAtualizacao(review);
         repository.save(review);
     }
 }
