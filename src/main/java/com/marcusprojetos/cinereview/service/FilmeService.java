@@ -36,7 +36,8 @@ public class FilmeService {
     }
 
     public void deletar(Filme filme){
-        filmeRepository.delete(filme);
+        Filme filmeAux = validator.validarExclusao(filme);
+        filmeRepository.delete(filmeAux);
     }
 
     //public List<Filme> pesquisa(String titulo, Integer anoLancamento){

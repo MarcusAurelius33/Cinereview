@@ -36,7 +36,7 @@ public class FilmeController implements GenericController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Filme cadastrado."),
             @ApiResponse(responseCode = "422", description = "Erro de validação."),
-            @ApiResponse(responseCode = "409", description = "Filme já cadastrado!")
+            @ApiResponse(responseCode = "409", description = "Filme já cadastrado.")
     })
     public ResponseEntity<Void> salvarFilme(@RequestBody @Valid FilmeDTO dto) {
             Filme filme = mapper.toEntity(dto);
@@ -50,7 +50,7 @@ public class FilmeController implements GenericController {
     @Operation(summary = "Pesquisa(ID)", description = "Obter os dados de um filme usando o ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Filme encontrado."),
-            @ApiResponse(responseCode = "404", description = "Filme não encontrado!")
+            @ApiResponse(responseCode = "404", description = "Filme não encontrado.")
     })
     public ResponseEntity<ResultadoPesquisaFilmeDTO> obterDetalhes(@PathVariable("id") String id){
         var idFilme = UUID.fromString(id);
@@ -68,18 +68,16 @@ public class FilmeController implements GenericController {
         @Operation(summary = "Deletar", description = "Deleta um filme cadastrado")
         @ApiResponses({
                 @ApiResponse(responseCode = "204", description = "Filme deletado."),
-                @ApiResponse(responseCode = "404", description = "Filme não encontrado!"),
+                @ApiResponse(responseCode = "404", description = "Filme não encontrado."),
         })
-        public ResponseEntity<Void> deletarFilme(@PathVariable("id") String id){
+        public ResponseEntity<Object> deletarFilme(@PathVariable("id") String id){
             var idFilme = UUID.fromString(id);
-            Optional<Filme> filme = service.obterPorId(idFilme);
-
-            if (filme.isEmpty()){
-                return ResponseEntity.notFound().build();
-            }
-            service.deletar(filme.get());
-
-            return ResponseEntity.noContent().build();
+            return service.obterPorId(idFilme)
+                    .map(filme -> {
+                        service.deletar(filme);
+                        return ResponseEntity.noContent().build();
+                    }
+                    ).orElseGet(() -> ResponseEntity.notFound().build());
         }
 
         @GetMapping
@@ -107,8 +105,9 @@ public class FilmeController implements GenericController {
         @Operation(summary = "Atualizar", description = "Atualiza as informações de um filme cadastrado")
         @ApiResponses({
                 @ApiResponse(responseCode = "204", description = "Filme atualizado."),
-                @ApiResponse(responseCode = "404", description = "Filme não encontrado!"),
-                @ApiResponse(responseCode = "409", description = "Filme já cadastrado!")
+                @ApiResponse(responseCode = "404", description = "Filme não encontrado."),
+                @ApiResponse(responseCode = "409", description = "Filme já cadastrado."),
+                @ApiResponse(responseCode = "422", description = "Erro de validação.")
         })
         public ResponseEntity<Object> atualizar(@PathVariable("id") String id, @RequestBody @Valid FilmeDTO dto){
             return service.obterPorId(UUID.fromString(id))

@@ -49,7 +49,7 @@ public class ReviewController implements GenericController {
     @Operation(summary = "Pesquisa(ID)", description = "Obter os dados de um review usando o ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Review encontrado."),
-            @ApiResponse(responseCode = "404", description = "Review não encontrado!")
+            @ApiResponse(responseCode = "404", description = "Review não encontrada.")
     })
     public ResponseEntity<ResultadoPesquisaReviewDTO> obterDetalhes(@PathVariable("id") String id){
         return service.obterPorId(UUID.fromString(id))
@@ -65,15 +65,15 @@ public class ReviewController implements GenericController {
     @Operation(summary = "Deletar", description = "Deleta um review cadastrado")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Review deletado."),
-            @ApiResponse(responseCode = "400", description = "Você não tem permissão para excluir esta review!"),
-            @ApiResponse(responseCode = "404", description = "Review não encontrado!")
+            @ApiResponse(responseCode = "400", description = "Você não tem permissão para excluir esta review."),
+            @ApiResponse(responseCode = "400", description = "Review não encontrado.")
     })
     public ResponseEntity<Object> deletar(@PathVariable("id") String id){
         return service.obterPorId(UUID.fromString(id))
                 .map(review -> {
                     service.deletar(review);
                     return ResponseEntity.noContent().build();
-                        }
+                    }
                 ).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -108,9 +108,8 @@ public class ReviewController implements GenericController {
     @Operation(summary = "Atualizar", description = "Atualiza as informações de um review cadastrado")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Review atualizado."),
-            @ApiResponse(responseCode = "400", description = "Você não tem permissão para alterar esta review!"),
-            @ApiResponse(responseCode = "404", description = "Review não encontrado!"),
-            @ApiResponse(responseCode = "409", description = "Review já cadastrado!")
+            @ApiResponse(responseCode = "400", description = "Você não tem permissão para alterar esta review."),
+            @ApiResponse(responseCode = "404", description = "Review não encontrado."),
     })
     public ResponseEntity<Object> atualizar(@PathVariable ("id") String id, @RequestBody @Valid ReviewDTO dto){
         return service.obterPorId(UUID.fromString(id))

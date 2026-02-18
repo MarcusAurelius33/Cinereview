@@ -2,6 +2,7 @@ package com.marcusprojetos.cinereview.validator;
 
 import com.marcusprojetos.cinereview.entities.Filme;
 import com.marcusprojetos.cinereview.exceptions.CampoInvalidoException;
+import com.marcusprojetos.cinereview.exceptions.FonteNaoEncontradaException;
 import com.marcusprojetos.cinereview.exceptions.RegistroDuplicadoException;
 import com.marcusprojetos.cinereview.repository.FilmeRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,13 @@ public class FilmeValidator {
             throw new CampoInvalidoException("anoLancamento", "Filmes devem ter data de lançamento inferior a data de cadastro.");
         }
     }
+
+    public Filme validarExclusao(Filme filme){
+        Filme filmeAux = repository.findById(filme.getId())
+                .orElseThrow(() -> new FonteNaoEncontradaException("Filme não encontrado!"));
+        return filmeAux;
+    }
+
 
     private boolean isAnoLancamentoFuturo(Filme filme) {
         if (filme.getAnoLancamento() == null) {

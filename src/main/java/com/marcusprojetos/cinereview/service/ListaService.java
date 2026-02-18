@@ -36,6 +36,7 @@ public class ListaService {
 
 
     public void deletar(Lista lista){
+        validator.validarExclusaoLista(lista);
         repository.delete(lista);
     }
 
@@ -44,18 +45,16 @@ public class ListaService {
         return repository.findById(id);
     }
 
+
     public void adicionarFilme(UUID idLista, UUID idFilme) {
-
         Lista listaAux = validator.validarAdicao(idLista, idFilme);
-
         repository.save(listaAux);
     }
 
 
+
     public void excluirFilme(UUID idLista, UUID idFilme) {
-
         Lista listaAux = validator.validarExclusao(idLista, idFilme);
-
         repository.save(listaAux);
     }
 }

@@ -33,7 +33,7 @@ public class ReviewService {
     }
 
     public Optional<Review> obterPorId(UUID id){
-        return repository.findById(id);
+        return reviewValidator.validarGetId(id);
     }
 
     public void deletar(Review review){

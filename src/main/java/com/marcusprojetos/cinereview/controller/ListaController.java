@@ -29,7 +29,7 @@ public class ListaController implements GenericController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Criar", description = "Criar uma lista de filmes cadastrados")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Lista criada."),
+            @ApiResponse(responseCode = "201", description = "Lista criada."),
             @ApiResponse(responseCode = "409", description = "O usuário já possui uma lista com esse nome!"),
             @ApiResponse(responseCode = "422", description = "Erro de validação!"),
     })
@@ -45,7 +45,8 @@ public class ListaController implements GenericController {
     @Operation(summary = "Deletar", description = "Deleta uma lista de filmes")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Lista deletada."),
-            @ApiResponse(responseCode = "404", description = "Lista não encontrada!"),
+            @ApiResponse(responseCode = "400", description = "Você não tem permissão para alterar esta lista."),
+            @ApiResponse(responseCode = "404", description = "Lista não encontrada"),
     })
     public ResponseEntity<Object> deletar(@RequestParam ("id") String id){
         return service.obterPorId(UUID.fromString(id))

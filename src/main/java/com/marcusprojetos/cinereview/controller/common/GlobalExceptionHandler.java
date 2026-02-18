@@ -2,10 +2,7 @@ package com.marcusprojetos.cinereview.controller.common;
 
 import com.marcusprojetos.cinereview.controller.dto.ErroCampo;
 import com.marcusprojetos.cinereview.controller.dto.ErroResposta;
-import com.marcusprojetos.cinereview.exceptions.CampoInvalidoException;
-import com.marcusprojetos.cinereview.exceptions.LoginEmUsoException;
-import com.marcusprojetos.cinereview.exceptions.OperacaoNaopermitidaException;
-import com.marcusprojetos.cinereview.exceptions.RegistroDuplicadoException;
+import com.marcusprojetos.cinereview.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
@@ -62,6 +59,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErroResposta handleAcessDeniedException(AccessDeniedException e) {
         return new ErroResposta(HttpStatus.FORBIDDEN.value(), "Acesso negado!", List.of());
+    }
+
+    @ExceptionHandler(FonteNaoEncontradaException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroResposta handleFonteNaoEcontradaException(FonteNaoEncontradaException e) {
+        return new ErroResposta(HttpStatus.NOT_FOUND.value(),e.getMessage(), List.of());
     }
 
 
