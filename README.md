@@ -112,7 +112,7 @@ Certifique-se de ter as seguintes ferramentas instaladas:
 ### 📥 Passo 1: Clonar o Repositório
 Abra o seu terminal e execute os comandos abaixo para baixar o código-fonte:
 ```bash
-git clone [https://github.com/seu-usuario/cinereview.git](https://github.com/seu-usuario/cinereview.git)
+git clone [https://github.com/seu-usuario/cinereview.git](https://github.com/MarcusAurelius33/Cinereview.git)
 cd cinereview
 ```
 
