@@ -16,13 +16,14 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 
 @Component
 @RequiredArgsConstructor
 public class LoginSocialSucessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
-    private static final String SENHA_PADRAO = "321";
+    private static final String SENHA_PADRAO = UUID.randomUUID().toString();
 
     private final PasswordEncoder passwordEncoder;
 

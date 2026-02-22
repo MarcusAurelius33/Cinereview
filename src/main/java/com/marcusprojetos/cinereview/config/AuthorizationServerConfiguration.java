@@ -53,11 +53,14 @@ public class AuthorizationServerConfiguration {
 
         http.securityMatcher(auth2AuthorizationServerConfigurer.getEndpointsMatcher())
                 .with(auth2AuthorizationServerConfigurer, Customizer.withDefaults())
-                .csrf(csrf -> csrf.ignoringRequestMatchers(auth2AuthorizationServerConfigurer.getEndpointsMatcher()));
+                .csrf(csrf ->
+                        csrf.ignoringRequestMatchers(auth2AuthorizationServerConfigurer.getEndpointsMatcher()));
 
-        http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
+        http.authorizeHttpRequests(authorize ->
+                authorize.anyRequest().authenticated());
 
-        http.oauth2ResourceServer(oauth2RS -> oauth2RS.jwt(Customizer.withDefaults()));
+        http.oauth2ResourceServer(oauth2RS ->
+                oauth2RS.jwt(Customizer.withDefaults()));
 
         http.formLogin(configurer -> configurer.loginPage("/login"));
 
@@ -150,6 +153,7 @@ public class AuthorizationServerConfiguration {
                     List<String> authoritiesList = authorities.stream().map(GrantedAuthority::getAuthority).toList();
                     context
                             .getClaims()
+                            .claim("id", authentication.getUsuario().getId().toString())
                             .claim("authorities", authoritiesList)
                             .claim("email", authentication.getUsuario().getEmail());
                 }

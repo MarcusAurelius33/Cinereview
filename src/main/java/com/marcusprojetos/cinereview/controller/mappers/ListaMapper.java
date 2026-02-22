@@ -17,8 +17,9 @@ public abstract class ListaMapper {
     @Autowired
     UsuarioRepository usuarioRepository;
 
-    @Mapping(target = "filmes", expression = "java( dto.id_filmes().stream().map(id -> filmeRepository.findById(id).orElse(null)).filter(java.util.Objects::nonNull).toList() )")
+    @Mapping(target = "filmes", expression = "java( filmeRepository.findAllById(dto.id_filmes()) )")
     public abstract Lista toEntity(ListaDTO dto);
+
 
     //public abstract ResultadoPesquisaListaDTO toDTO(Lista lista);
 
