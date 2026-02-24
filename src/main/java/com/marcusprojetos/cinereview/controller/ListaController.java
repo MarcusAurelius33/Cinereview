@@ -1,6 +1,8 @@
 package com.marcusprojetos.cinereview.controller;
 
 import com.marcusprojetos.cinereview.controller.dto.ListaDTO;
+import com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisa.ResultadoPesquisaListaDTO;
+import com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisa.ResultadoPesquisaReviewDTO;
 import com.marcusprojetos.cinereview.controller.mappers.ListaMapper;
 import com.marcusprojetos.cinereview.entities.Lista;
 import com.marcusprojetos.cinereview.service.ListaService;
@@ -10,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +51,7 @@ public class ListaController implements GenericController {
             @ApiResponse(responseCode = "400", description = "Você não tem permissão para alterar esta lista."),
             @ApiResponse(responseCode = "404", description = "Lista não encontrada"),
     })
-    public ResponseEntity<Object> deletar(@RequestParam ("id") String id){
+    public ResponseEntity<Object> deletar(@PathVariable ("id") String id){
         return service.obterPorId(UUID.fromString(id))
                 .map(lista -> {
                     service.deletar(lista);
@@ -89,4 +92,28 @@ public class ListaController implements GenericController {
         service.excluirFilme(UUID.fromString(idLista), UUID.fromString(idFilme));
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Pesquisa", description = "Pesquisa listas cadastradas a partir de parâmetros")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Resultados relacionados"),
+    })
+    public ResponseEntity<Page<ResultadoPesquisaListaDTO>> pesquisa(
+            @RequestParam(value = "titulo-lista", required = false)
+            String titulo,
+            @RequestParam(value = "nome-usuario", required = false)
+            String nomeUsuario,
+            @RequestParam(value = "pagina", defaultValue = "0")
+            Integer pagina,
+            @RequestParam(value = "tamanho-pagina", defaultValue = "10")
+            Integer tamanhoPagina
+    )
+    {
+        Page<Lista> paginaResultado = service.pesquisa(titulo, nomeUsuario, pagina, tamanhoPagina);
+
+        Page<ResultadoPesquisaListaDTO> resultado = paginaResultado.map(mapper::toDTO);
+        return ResponseEntity.ok(resultado);
+    }
+
 }

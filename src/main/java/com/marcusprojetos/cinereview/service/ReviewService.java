@@ -45,6 +45,7 @@ public class ReviewService {
             String nomeFilme,
             BigDecimal nota,
             Integer anoPublicacao,
+            String nomeUsuario,
             Integer pagina,
             Integer tamanhoPagina){
 
@@ -61,6 +62,10 @@ public class ReviewService {
 
         if(anoPublicacao != null){
             specs = specs.and(ReviewSpecs.anoPublicacaoEqual(anoPublicacao));
+        }
+
+        if(nomeUsuario != null){
+            specs = specs.and(ReviewSpecs.nomeUsuarioReviewLike(nomeUsuario));
         }
 
         Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);

@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.tags.Tags;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -81,7 +80,7 @@ public class ReviewController implements GenericController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Pesquisa", description = "Pesquisa reviews cadastrados a partir de parâmetros")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Review encontrado."),
+            @ApiResponse(responseCode = "200", description = "Resultados relacionados"),
     })
     public ResponseEntity<Page<ResultadoPesquisaReviewDTO>> pesquisa(
             @RequestParam(value = "titulo-filme", required = false)
@@ -90,13 +89,16 @@ public class ReviewController implements GenericController {
             BigDecimal nota,
             @RequestParam(value = "ano-review", required = false)
             Integer anoPublicacao,
+            @RequestParam(value = "nome-usuario", required = false)
+            String nomeUsuario,
             @RequestParam(value = "pagina", defaultValue = "0")
             Integer pagina,
             @RequestParam(value = "tamanho-pagina", defaultValue = "10")
             Integer tamanhoPagina
             )
     {
-        Page<Review> paginaResultado = service.pesquisa(nomeFilme, nota, anoPublicacao, pagina, tamanhoPagina);
+        Page<Review> paginaResultado = service.
+                pesquisa(nomeFilme, nota, anoPublicacao, nomeUsuario, pagina, tamanhoPagina);
 
         Page<ResultadoPesquisaReviewDTO> resultado = paginaResultado.map(mapper::toDTO);
 

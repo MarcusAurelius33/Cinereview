@@ -13,7 +13,9 @@ public class FilmeSpecs {
 
     public static Specification<Filme> generoFilmeLike(GeneroFilme generoFilme){
         return ((root, query, cb) ->
-                cb.like(cb.upper(root.get("generoFilme").as(String.class)), "%" + generoFilme.toString().toUpperCase() + "%"));
+                cb.like(cb.upper(root.get("generoFilme").as(String.class)), "%" + generoFilme
+                        .toString()
+                        .toUpperCase() + "%"));
     }
 
     public static Specification<Filme> anoLancamentoFilmeEqual(Integer anoLancamentoFilme){

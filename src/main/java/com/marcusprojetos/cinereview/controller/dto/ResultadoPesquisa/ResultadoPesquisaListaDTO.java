@@ -9,7 +9,8 @@ import java.util.UUID;
 public record ResultadoPesquisaListaDTO(
         UUID id,
         String nomeUsuario,
-        String titulo
+        String titulo,
+        String descricao
         //List<FilmeDTO> filmes
         ) {
 }

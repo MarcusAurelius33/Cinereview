@@ -2,9 +2,7 @@ package com.marcusprojetos.cinereview.validator;
 
 import com.marcusprojetos.cinereview.entities.Filme;
 import com.marcusprojetos.cinereview.entities.Lista;
-import com.marcusprojetos.cinereview.entities.Review;
 import com.marcusprojetos.cinereview.entities.Usuario;
-import com.marcusprojetos.cinereview.exceptions.CampoInvalidoException;
 import com.marcusprojetos.cinereview.exceptions.FonteNaoEncontradaException;
 import com.marcusprojetos.cinereview.exceptions.OperacaoNaopermitidaException;
 import com.marcusprojetos.cinereview.exceptions.RegistroDuplicadoException;
@@ -14,7 +12,7 @@ import com.marcusprojetos.cinereview.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,66 +31,53 @@ public class ListaValidator {
         }
     }
 
-
-    public Lista validarAdicao(UUID idLista, UUID idFilme){
+    public Lista buscarEValidarPosse(UUID idLista){
         //Buscar lista
         Lista lista = repository.findById(idLista)
                 .orElseThrow(() -> new FonteNaoEncontradaException("Lista não encontrada."));
 
-        //segurança
+        //seguranca
         Usuario usuarioLogado = securityService.obterUsuarioLogado();
-        if (!lista.getUsuario().getId().equals(usuarioLogado.getId())) {
-            throw new OperacaoNaopermitidaException("Você não tem permissão para alterar esta lista.");
+
+
+        boolean isDono = lista.getUsuario().getId().equals(usuarioLogado.getId());
+        boolean isAdmin = usuarioLogado.getRoles().contains("ADMIN");
+        if(!isDono && !isAdmin){
+            throw  new OperacaoNaopermitidaException("Você não tem permissão para alterar essa lista.");
         }
 
-        //Busca o filme
-        Filme filme = filmeRepository.findById(idFilme)
-                .orElseThrow(() -> new FonteNaoEncontradaException("Filme não encontrado."));
-
-        // filme duplicado
-        if (lista.getFilmes().contains(filme)) {
-            throw new RegistroDuplicadoException("Este filme já está na sua lista!");
-        }
-        lista.getFilmes().add(filme);
-        lista.setDataModificacao(LocalDateTime.now());
         return lista;
     }
 
+    public Filme buscarEValidarFilme(UUID idFilme) {
+        return filmeRepository.findById(idFilme).orElseThrow(()
+                -> new FonteNaoEncontradaException("Filme não encontrado."));
+    }
 
-    public Lista validarExclusao(UUID idLista, UUID idFilme) {
-        //Busca a lista
-        Lista lista = repository.findById(idLista)
-                .orElseThrow(() -> new FonteNaoEncontradaException("Lista não encontrada."));
-
-        //segurança
-        Usuario usuarioLogado = securityService.obterUsuarioLogado();
-        if (!lista.getUsuario().getId().equals(usuarioLogado.getId())) {
-            throw new OperacaoNaopermitidaException("Você não tem permissão para alterar esta lista!");
+    public void filmePresente(Lista lista, Filme filme){
+        if (repository.existsByIdAndFilmes_id(lista.getId(), filme.getId())){
+            throw new RegistroDuplicadoException("Filme já presente na lista");
         }
+    }
 
-        //Busca o filme
-        Filme filme = filmeRepository.findById(idFilme)
-                .orElseThrow(() -> new FonteNaoEncontradaException("Filme não encontrado."));
-
-
-        if (!lista.getFilmes().contains(filme)) {
-            throw new OperacaoNaopermitidaException("O filme não está na lista!");
+    public void filmeNaoPresente(Lista lista, Filme filme){
+        if (!repository.existsByIdAndFilmes_id(lista.getId(), filme.getId())){
+            throw new FonteNaoEncontradaException("Filme não existe na lista");
         }
-
-        lista.getFilmes().remove(filme);
-        lista.setDataModificacao(LocalDateTime.now());
-        return lista;
     }
 
 
     public void validarExclusaoLista(Lista lista){
         Usuario usuarioLogado = securityService.obterUsuarioLogado();
-        if (!lista.getUsuario().getId().equals(usuarioLogado.getId())) {
-            throw new OperacaoNaopermitidaException("Você não tem permissão para alterar esta lista!");
+        boolean isDono = lista.getUsuario().getId().equals(usuarioLogado.getId());
+        boolean isAdmin = usuarioLogado.getRoles().contains("ADMIN");
+
+        if(!isDono && !isAdmin){
+            throw  new OperacaoNaopermitidaException("Você não tem permissão para alterar essa lista.");
         }
 
         if(!existeLista(lista)){
-            throw new FonteNaoEncontradaException("Filme não encontrado.");
+            throw new FonteNaoEncontradaException("Lista não encontrada.");
         }
     }
 
@@ -111,6 +96,6 @@ public class ListaValidator {
         if (lista.getId() == null) {
             return listaEncontrada.isPresent();
         }
-        return !lista.getId().equals(listaEncontrada.get().getId()) && listaEncontrada.isPresent();
+        return listaEncontrada.isPresent() && !lista.getId().equals(listaEncontrada.get().getId());
         }
     }

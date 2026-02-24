@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface ListaRepository extends JpaRepository<Lista, UUID>, JpaSpecificationExecutor<Lista> {
 
     Optional<Lista> findByTituloAndUsuario(String titulo, Usuario usuario);
+
+    boolean existsByIdAndFilmes_id(UUID idLista, UUID idFilme);
 }
