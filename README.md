@@ -76,11 +76,15 @@ A documentação interativa completa, incluindo schemas JSON de requisição e r
 * `DELETE /listas/{id}`: Exclusão de uma lista inteira.
 * `POST /listas/{idLista}/filmes/{idFilme}`: Adiciona um filme específico a uma lista.
 * `DELETE /listas/{idLista}/filmes/{idFilme}`: Remove um filme de uma lista.
+* `GET /listas/{id}`: Detalhes completos de uma lista.
+* `GET /listas`: Pesquisa dinâmica paginada por nome do autor e título da lista.
+
 
 ### 📝 Reviews (`/reviews`)
 * `POST /reviews`: Publicação de avaliações (impede múltiplas reviews do mesmo usuário para o mesmo filme).
 * `GET /reviews`: Busca paginada de reviews.
 * `PUT /reviews/{id}` / `DELETE /reviews/{id}`: Gestão e exclusão de reviews pelo próprio autor.
+* `GET /reviews/{id}`: Detalhes copletos de um review.
 
 ### 👤 Gestão e Identidade (`/usuarios` e `/clients`)
 * `POST /usuarios`: Cadastro de novos usuários na plataforma.
