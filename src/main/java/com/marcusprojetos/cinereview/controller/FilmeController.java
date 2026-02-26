@@ -46,7 +46,7 @@ public class FilmeController implements GenericController {
     }
 
     @GetMapping("{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @Operation(summary = "Pesquisa(ID)", description = "Obter os dados de um filme usando o ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Filme encontrado."),
@@ -81,7 +81,7 @@ public class FilmeController implements GenericController {
         }
 
         @GetMapping
-        @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
+        @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
         @Operation(summary = "Pesquisa", description = "Pesquisa filmes cadastrados a partir de parâmetros")
         @ApiResponses({
                 @ApiResponse(responseCode = "200", description = "Filme encontrado."),

@@ -39,8 +39,11 @@ public class ReviewValidator {
 
         Usuario usuarioLogado = securityService.obterUsuarioLogado();
 
-        if(!review.getUsuario().getId().equals(usuarioLogado.getId())) {
-            throw new OperacaoNaopermitidaException("Você não tem permissão para alterar esta review!");
+        boolean isDono = review.getUsuario().getId().equals(usuarioLogado.getId());
+        boolean isAdmin = usuarioLogado.getRoles().contains("ADMIN");
+
+        if(!isDono && !isAdmin){
+            throw  new OperacaoNaopermitidaException("Você não tem permissão para alterar essa lista.");
         }
     }
 
@@ -55,8 +58,11 @@ public class ReviewValidator {
 
         Usuario usuarioLogado = securityService.obterUsuarioLogado();
 
-        if(!review.getUsuario().getId().equals(usuarioLogado.getId())) {
-            throw new OperacaoNaopermitidaException("Você não tem permissão para excluir esta review!");
+        boolean isDono = review.getUsuario().getId().equals(usuarioLogado.getId());
+        boolean isAdmin = usuarioLogado.getRoles().contains("ADMIN");
+
+        if(!isDono && !isAdmin){
+            throw  new OperacaoNaopermitidaException("Você não tem permissão para alterar essa lista.");
         }
     }
 

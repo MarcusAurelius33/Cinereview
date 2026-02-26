@@ -45,9 +45,9 @@ public class ReviewController implements GenericController {
 
     @GetMapping("{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @Operation(summary = "Pesquisa(ID)", description = "Obter os dados de um review usando o ID")
+    @Operation(summary = "Obter detalhes (id)", description = "Obter os dados de um review usando o ID")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Review encontrado."),
+            @ApiResponse(responseCode = "200", description = "Review encontrada."),
             @ApiResponse(responseCode = "404", description = "Review não encontrada.")
     })
     public ResponseEntity<ResultadoPesquisaReviewDTO> obterDetalhes(@PathVariable("id") String id){

@@ -1,10 +1,10 @@
 package com.marcusprojetos.cinereview.controller.mappers;
 
 import com.marcusprojetos.cinereview.controller.dto.ListaDTO;
+import com.marcusprojetos.cinereview.controller.dto.ListaDetalhesDTO;
 import com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisa.ResultadoPesquisaListaDTO;
 import com.marcusprojetos.cinereview.entities.Lista;
 import com.marcusprojetos.cinereview.repository.FilmeRepository;
-import com.marcusprojetos.cinereview.repository.UsuarioRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,4 +21,6 @@ public abstract class ListaMapper {
     @Mapping(target = "nomeUsuario", source = "usuario.login")
     public abstract ResultadoPesquisaListaDTO toDTO(Lista lista);
 
-}
+    @Mapping(target = "nomeUsuario", source = "usuario.login")
+    public abstract ListaDetalhesDTO toDetalhesDTO(Lista lista);
+    }

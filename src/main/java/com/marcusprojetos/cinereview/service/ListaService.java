@@ -2,14 +2,9 @@ package com.marcusprojetos.cinereview.service;
 
 import com.marcusprojetos.cinereview.entities.Filme;
 import com.marcusprojetos.cinereview.entities.Lista;
-import com.marcusprojetos.cinereview.entities.Review;
 import com.marcusprojetos.cinereview.entities.Usuario;
-import com.marcusprojetos.cinereview.exceptions.OperacaoNaopermitidaException;
-import com.marcusprojetos.cinereview.exceptions.RegistroDuplicadoException;
-import com.marcusprojetos.cinereview.repository.FilmeRepository;
 import com.marcusprojetos.cinereview.repository.ListaRepository;
 import com.marcusprojetos.cinereview.repository.specs.ListaSpecs;
-import com.marcusprojetos.cinereview.repository.specs.ReviewSpecs;
 import com.marcusprojetos.cinereview.security.SecurityService;
 import com.marcusprojetos.cinereview.validator.ListaValidator;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -49,8 +43,13 @@ public class ListaService {
     }
 
 
-    public Optional<Lista> obterPorId(UUID id){
+    public Optional<Lista> findById(UUID id){
         return repository.findById(id);
+    }
+
+
+    public Lista obterDetalhes(UUID id){
+       return validator.validarObterDetalhes(id);
     }
 
 

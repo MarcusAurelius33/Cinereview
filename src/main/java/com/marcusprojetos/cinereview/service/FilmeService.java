@@ -40,17 +40,6 @@ public class FilmeService {
         filmeRepository.delete(filmeAux);
     }
 
-    //public List<Filme> pesquisa(String titulo, Integer anoLancamento){
-      //  if(titulo!=null && anoLancamento!=null){
-        //    return filmeRepository.findByTituloAndAnoLancamento(titulo, anoLancamento);
-        //}else if(titulo != null){
-          //  return filmeRepository.findByTitulo(titulo);
-        //}else if(anoLancamento != null){
-         //   return filmeRepository.findByAnoLancamento(anoLancamento);
-        //}
-        //return filmeRepository.findAll();
-    //}
-
     public Page<Filme> pesquisa(
             String titulo,
             GeneroFilme generoFilme,

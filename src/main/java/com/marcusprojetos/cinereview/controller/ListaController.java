@@ -2,7 +2,6 @@ package com.marcusprojetos.cinereview.controller;
 
 import com.marcusprojetos.cinereview.controller.dto.ListaDTO;
 import com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisa.ResultadoPesquisaListaDTO;
-import com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisa.ResultadoPesquisaReviewDTO;
 import com.marcusprojetos.cinereview.controller.mappers.ListaMapper;
 import com.marcusprojetos.cinereview.entities.Lista;
 import com.marcusprojetos.cinereview.service.ListaService;
@@ -52,7 +51,7 @@ public class ListaController implements GenericController {
             @ApiResponse(responseCode = "404", description = "Lista não encontrada"),
     })
     public ResponseEntity<Object> deletar(@PathVariable ("id") String id){
-        return service.obterPorId(UUID.fromString(id))
+        return service.findById(UUID.fromString(id))
                 .map(lista -> {
                     service.deletar(lista);
                     return ResponseEntity.noContent().build();
@@ -116,4 +115,18 @@ public class ListaController implements GenericController {
         return ResponseEntity.ok(resultado);
     }
 
+    @GetMapping("{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Obter detalhes (id)", description = "Obter detalhes de uma lista cadastrada")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Lista encontrada."),
+            @ApiResponse(responseCode = "404", description = "Lista não encontrada.")
+    })
+    public ResponseEntity<Object> obterDetalhes(@PathVariable("id") String id){
+        Lista listaAux = service.obterDetalhes(UUID.fromString(id));
+
+        var dto = mapper.toDetalhesDTO(listaAux);
+        return ResponseEntity
+                .ok(dto);
+    }
 }
