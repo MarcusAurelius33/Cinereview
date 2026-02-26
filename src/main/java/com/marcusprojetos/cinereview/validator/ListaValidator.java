@@ -82,7 +82,7 @@ public class ListaValidator {
     }
 
     public Lista validarObterDetalhes(UUID idLista){
-        Lista listaAux = repository.findById(idLista).orElseThrow(()
+        Lista listaAux = repository.findByIdComDetalhes(idLista).orElseThrow(()
                 -> new FonteNaoEncontradaException("Lista não encontrada."));
 
         return listaAux;

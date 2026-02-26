@@ -4,7 +4,6 @@ import com.marcusprojetos.cinereview.entities.enums.GeneroFilme;
 import jakarta.validation.constraints.*;
 
 
-import java.util.UUID;
 
 public record FilmeDTO(
         @NotBlank(message = "campo obrigatório")
