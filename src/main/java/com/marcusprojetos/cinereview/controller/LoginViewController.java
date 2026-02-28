@@ -22,7 +22,7 @@ public class LoginViewController {
         if (authentication instanceof CustomAuthentication customAut) {
             System.out.println(customAut.getUsuario());
         }
-        return "Olá " + authentication.getName();
+        return "Usuário autenticado: " + authentication.getName();
     }
 
     @GetMapping("/authorized")

@@ -124,7 +124,6 @@ public class ListaController implements GenericController {
     })
     public ResponseEntity<Object> obterDetalhes(@PathVariable("id") String id){
         Lista listaAux = service.obterDetalhes(UUID.fromString(id));
-
         var dto = mapper.toDetalhesDTO(listaAux);
         return ResponseEntity
                 .ok(dto);

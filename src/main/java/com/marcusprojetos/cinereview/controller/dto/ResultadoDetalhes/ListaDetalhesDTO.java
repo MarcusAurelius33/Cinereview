@@ -1,4 +1,6 @@
-package com.marcusprojetos.cinereview.controller.dto;
+package com.marcusprojetos.cinereview.controller.dto.ResultadoDetalhes;
+
+import com.marcusprojetos.cinereview.controller.dto.FilmeDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,5 +1,6 @@
 package com.marcusprojetos.cinereview.controller;
 
+import com.marcusprojetos.cinereview.controller.dto.ResultadoDetalhes.ReviewDetalhesDTO;
 import com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisa.ResultadoPesquisaReviewDTO;
 import com.marcusprojetos.cinereview.controller.dto.ReviewDTO;
 import com.marcusprojetos.cinereview.controller.mappers.ReviewMapper;
@@ -50,10 +51,10 @@ public class ReviewController implements GenericController {
             @ApiResponse(responseCode = "200", description = "Review encontrada."),
             @ApiResponse(responseCode = "404", description = "Review não encontrada.")
     })
-    public ResponseEntity<ResultadoPesquisaReviewDTO> obterDetalhes(@PathVariable("id") String id){
+    public ResponseEntity<ReviewDetalhesDTO> obterDetalhes(@PathVariable("id") String id){
         return service.obterPorId(UUID.fromString(id))
                 .map(review -> {
-                var dto = mapper.toDTO(review);
+                var dto = mapper.toDetalhesDTO(review);
                 return ResponseEntity.ok(dto);
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());

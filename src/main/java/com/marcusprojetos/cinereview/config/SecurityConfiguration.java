@@ -58,8 +58,8 @@ public class SecurityConfiguration {
             web.ignoring().requestMatchers(
                     "/v2/api-docs/**",
                     "/v3/api-docs/**",
-                    "/swagger-reosources/**",
-                    "/swaggwer-ui.html",
+                    "/swagger-resources/**",
+                    "/swagger-ui.html",
                     "/swagger-ui/**",
                     "/webjars/**"
             );

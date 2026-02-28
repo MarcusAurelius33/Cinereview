@@ -12,8 +12,6 @@ public record ResultadoPesquisaReviewDTO(
         String nomeUsuario,
         @JsonIgnoreProperties({"sinopse"})
         FilmeDTO filme,
-        LocalDateTime dataCadastro,
-        String texto,
         BigDecimal nota
 ) {
 }

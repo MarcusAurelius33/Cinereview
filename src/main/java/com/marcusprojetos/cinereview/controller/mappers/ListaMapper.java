@@ -1,7 +1,7 @@
 package com.marcusprojetos.cinereview.controller.mappers;
 
 import com.marcusprojetos.cinereview.controller.dto.ListaDTO;
-import com.marcusprojetos.cinereview.controller.dto.ListaDetalhesDTO;
+import com.marcusprojetos.cinereview.controller.dto.ResultadoDetalhes.ListaDetalhesDTO;
 import com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisa.ResultadoPesquisaListaDTO;
 import com.marcusprojetos.cinereview.entities.Lista;
 import com.marcusprojetos.cinereview.repository.FilmeRepository;

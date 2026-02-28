@@ -2,6 +2,8 @@ package com.marcusprojetos.cinereview.controller.mappers;
 
 import com.marcusprojetos.cinereview.controller.dto.ResultadoPesquisa.ResultadoPesquisaReviewDTO;
 import com.marcusprojetos.cinereview.controller.dto.ReviewDTO;
+import com.marcusprojetos.cinereview.controller.dto.ResultadoDetalhes.ReviewDetalhesDTO;
+import com.marcusprojetos.cinereview.entities.Lista;
 import com.marcusprojetos.cinereview.entities.Review;
 import com.marcusprojetos.cinereview.repository.FilmeRepository;
 import com.marcusprojetos.cinereview.repository.UsuarioRepository;
@@ -23,4 +25,8 @@ public abstract class ReviewMapper {
 
     @Mapping(target = "nomeUsuario", source = "usuario.login")
     public abstract ResultadoPesquisaReviewDTO toDTO(Review review);
+
+    @Mapping(target = "nomeUsuario", source = "usuario.login")
+    @Mapping(target = "filme", source = "filme")
+    public abstract ReviewDetalhesDTO toDetalhesDTO(Review review);
 }
