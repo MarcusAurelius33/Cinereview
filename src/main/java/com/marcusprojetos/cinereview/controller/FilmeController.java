@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("filmes")
@@ -38,6 +40,8 @@ public class FilmeController implements GenericController {
             @ApiResponse(responseCode = "409", description = "Filme já cadastrado.")
     })
     public ResponseEntity<Void> salvarFilme(@RequestBody @Valid FilmeDTO dto) {
+            log.info("Cadastrando novo filme: {}", dto.titulo());
+
             Filme filme = mapper.toEntity(dto);
             service.salvar(filme);
             URI location = gerarHeaderLocation(filme.getId());
@@ -70,6 +74,8 @@ public class FilmeController implements GenericController {
                 @ApiResponse(responseCode = "404", description = "Filme não encontrado."),
         })
         public ResponseEntity<Object> deletarFilme(@PathVariable("id") String id){
+            log.info("Deletando filme de id: {}", id);
+
             var idFilme = UUID.fromString(id);
             return service.obterPorId(idFilme)
                     .map(filme -> {

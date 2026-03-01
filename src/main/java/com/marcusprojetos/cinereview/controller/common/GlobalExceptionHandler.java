@@ -3,6 +3,7 @@ package com.marcusprojetos.cinereview.controller.common;
 import com.marcusprojetos.cinereview.controller.dto.ErroCampo;
 import com.marcusprojetos.cinereview.controller.dto.ErroResposta;
 import com.marcusprojetos.cinereview.exceptions.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -71,6 +73,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErroResposta handleErrosNaoTratados(RuntimeException e) {
+        log.error("Erro inesperado: {}", e);
         return new ErroResposta(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Ocorreu um erro inesperado, entre em contato com a administração.", List.of());
     }
 }
